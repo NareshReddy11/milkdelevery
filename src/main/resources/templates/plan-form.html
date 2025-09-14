@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Create Plan</title><link rel="stylesheet" href="/static/style.css"/></head>
+<body>
+  <div class="container">
+    <div class="header"><div class="brand">Shanthi Farms</div></div>
+    <h3>Create Milk Plan</h3>
+    <form method="post" action="/plans">
+      <label>Start Date</label><input name="startDate" type="date" value="" style="width:100%;padding:8px"/><br/>
+      <label>Days</label><input name="days" type="number" value="30" style="width:100%;padding:8px"/><br/>
+      <label>Liters per day</label><input name="liters" type="number" step="0.5" value="1" style="width:100%;padding:8px"/><br/>
+      <label>Subscription Type</label>
+      <select name="subscriptionType" style="width:100%;padding:8px">
+        <option value="DAILY">Daily</option>
+        <option value="WEEKLY">Weekly</option>
+        <option value="MONTHLY">Monthly</option>
+        <option value="CUSTOM">Custom</option>
+      </select><br/>
+      <button class="button" type="submit">Create Plan</button>
+    </form>
+    <div style="margin-top:12px;"><a href="/home">Back</a></div>
+  </div>
+</body></html>

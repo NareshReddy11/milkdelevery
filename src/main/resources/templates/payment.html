@@ -1,0 +1,27 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Payment</title><link rel="stylesheet" href="/static/style.css"/></head>
+<body>
+  <div class="container">
+    <div class="header"><div class="brand">Shanthi Farms</div></div>
+    <h3>Scan to Pay</h3>
+    <img src="/static/upi_qr.png" alt="UPI QR" style="width:200px;height:200px;"/>
+    <div>
+      <p>Scan the QR code above to pay via PhonePe / GPay / UPI.</p>
+      <p>After payment, click below:</p>
+      <form onsubmit="markPaid(event)">
+        <input type="hidden" id="orderId" th:value="${orderId}" />
+        <button type="submit">I Have Paid</button>
+      </form>
+      <script>
+      function markPaid(e) {
+        e.preventDefault();
+        var orderId = document.getElementById('orderId').value;
+        fetch('/orders/' + orderId + '/paid', {method: 'PATCH'})
+          .then(resp => resp.text())
+          .then(msg => { alert('Payment status: ' + msg); window.location.href = '/orders'; });
+      }
+      </script>
+    </div>
+    <div style="margin-top:12px;"><a href="/home">Back</a></div>
+  </div>
+</body></html>

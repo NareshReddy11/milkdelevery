@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.w3.org/1999/xhtml"><head><meta charset="utf-8"/><title>Admin - Shanthi Farms</title><link rel="stylesheet" href="/static/style.css"/></head>
+<body>
+  <div class="container">
+    <div class="header"><div class="brand">Admin - Shanthi Farms</div></div>
+    <h3>Admin Panel</h3>
+    <div class="card"><a class="button" href="/admin/deliveries">View Deliveries</a></div>
+    <div class="card"><a class="button" href="/admin/report">Download Today Report (CSV)</a></div>
+    <div th:if="${error != null}" class="error-message">
+      <span th:text="${error}"></span>
+    </div>
+    <h3>Customers</h3>
+    <div>
+      <div th:each="c : ${customers}">
+        <div class="card">
+          <div><strong th:text="${c.name}"></strong> (<span th:text="${c.phone}"></span>)</div>
+          <div>Address: <span th:text="${c.address}"></span></div>
+          <div th:if="${c.plans != null and #lists.size(c.plans) > 0}">
+            <ul>
+              <li th:each="p : ${c.plans}">
+                <span th:text="${p.litersPerDay}"></span> L/day, <span th:text="${p.days}"></span> days, from <span th:text="${p.startDate}"></span>
+                <span th:if="${p.status != null}">[<span th:text="${p.status}"></span>]</span>
+              </li>
+            </ul>
+          </div>
+          <div th:if="${c.plans == null or #lists.size(c.plans) == 0}">No plans found.</div>
+          <a th:href="@{'/admin/customers/' + ${c.id} + '/orders'}">View Orders</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body></html>

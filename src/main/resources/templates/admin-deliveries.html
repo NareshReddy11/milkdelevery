@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Deliveries</title><link rel="stylesheet" href="/static/style.css"/></head>
+<body>
+  <div class="container">
+    <div class="header"><div class="brand">Deliveries</div></div>
+    <h3 th:text="'Deliveries for ' + ${date}"></h3>
+    <div>
+      <div th:each="r : ${records}">
+        <div class="card">
+          <div><strong th:text="${r.milkPlan.customer.phone}"></strong></div>
+          <div>Liters: <span th:text="${r.milkPlan.litersPerDay}"></span></div>
+          <div>Status: <span th:text="${r.status}"></span></div>
+          <form th:action="@{'/admin/deliveries/' + ${r.id} + '/deliver'}" method="post">
+            <button class="button" type="submit">Mark Delivered</button>
+          </form>
+          <div th:if="${r.status} != 'DELIVERED' and ${r.status} != 'SKIPPED'">
+            <button onclick="adminSkip([[${r.id}]])">Skip</button>
+          </div>
+          <div th:if="${r.status} == 'SKIPPED' or ${r.status} == 'PAUSED'">
+            <button onclick="adminReinstate([[${r.id}]])">Reinstate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px;"><a href="/admin">Back</a></div>
+  </div>
+  <script>
+  function adminSkip(id) {
+    fetch('/admin/deliveries/' + id + '/skip', {method: 'PATCH'})
+      .then(resp => resp.text())
+      .then(msg => { alert(msg); location.reload(); });
+  }
+  function adminReinstate(id) {
+    fetch('/admin/deliveries/' + id + '/reinstate', {method: 'PATCH'})
+      .then(resp => resp.text())
+      .then(msg => { alert(msg); location.reload(); });
+  }
+  </script>
+</body></html>

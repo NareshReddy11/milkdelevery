@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.w3.org/1999/xhtml"><head><meta charset="utf-8"/><title>Account</title><link rel="stylesheet" href="/static/style.css"/></head>
+<body>
+  <div class="container">
+    <div class="header"><div class="brand">Shanthi Farms</div></div>
+    <h3>My Account</h3>
+    <div>
+      <div>Name: <span th:text="${customer.name}"></span></div>
+      <div>Phone: <span th:text="${customer.phone}"></span></div>
+      <div>Address: <span th:text="${customer.address}"></span></div>
+      <h4>My Plans:</h4>
+      <div th:if="${plans != null and #lists.size(plans) > 0}">
+        <ul>
+          <li th:each="p : ${plans}">
+            <span th:text="${p.litersPerDay}"></span> Liters/day for <span th:text="${p.days}"></span> days (from <span th:text="${p.startDate}"></span>)
+            <span th:if="${p.status != null}">[<span th:text="${p.status}"></span>]</span>
+          </li>
+        </ul>
+      </div>
+      <div th:if="${plans == null or #lists.size(plans) == 0}">No plans found.</div>
+    </div>
+    <div style="margin-top:12px;"><a href="/home">Back</a> | <a href="/logout">Logout</a></div>
+  </div>
+</body></html>
