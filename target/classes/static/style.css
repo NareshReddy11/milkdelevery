@@ -1,103 +1,29 @@
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #e6f4ea 0%, #f4f6f8 100%);
-  color: #0f172a;
-  margin: 0;
-}
-
-.container {
-  max-width: 480px;
-  margin: 32px auto;
-  background: #fff;
-  padding: 24px 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(16,185,129,0.08);
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.logo {
-  width: 40px;
-  height: 40px;
-  background: url('/static/upi_qr.png') no-repeat center center;
-  background-size: contain;
-  border-radius: 50%;
-  border: 2px solid #0f9d58;
-}
-
-.brand {
-  font-weight: 700;
-  color: #0f9d58;
-  font-size: 1.5em;
-  letter-spacing: 1px;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  background: #10b981;
-  padding: 10px 18px;
-  border-radius: 10px;
-  margin-bottom: 18px;
-}
-
-.navbar a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  margin: 0 8px;
-  transition: color 0.2s;
-}
-
-.navbar a:hover {
-  color: #e6f4ea;
-}
-
-.card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  padding: 16px;
-  border-radius: 12px;
-  margin: 12px 0;
-  box-shadow: 0 2px 8px rgba(16,185,129,0.06);
-}
-
-.button {
-  display: inline-block;
-  padding: 12px 20px;
-  background: linear-gradient(90deg, #10b981 60%, #0f9d58 100%);
-  color: #fff;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(16,185,129,0.10);
-  transition: background 0.2s;
-}
-
-.button:hover {
-  background: linear-gradient(90deg, #0f9d58 60%, #10b981 100%);
-}
-
-.badge {
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95em;
-  display: inline-block;
-}
-
-.badge-pending { background: #fffbe6; color: #b45309; }
-.badge-delivered { background: #e6f4ea; color: #065f46; }
-.badge-skipped { background: #fee2e2; color: #991b1b; }
-.badge-paused { background: #e0e7ff; color: #3730a3; }
-
-@media (max-width: 600px) {
-  .container { max-width: 98vw; padding: 12px 4vw; }
-  .header { flex-direction: column; gap: 6px; }
-  .navbar { flex-direction: column; gap: 6px; padding: 8px 6px; }
-}
+/* Shanthi Farms theme */
+:root{--green:#0f9d58;--dark:#0b3f2a;--muted:#6b7280;--bg:#f4f6f8;}
+body{font-family: 'Segoe UI', Roboto, Arial, sans-serif; background:var(--bg); color:#072018; margin:0;}
+.container{max-width:480px;margin:18px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(16,185,129,0.08);}
+.header{display:flex;align-items:center;gap:12px;}
+.brand{font-weight:800;color:var(--green);font-size:20px;}
+.logo-img{width:56px;height:56px;border-radius:8px;object-fit:contain;}
+h1,h2,h3{margin:8px 0;color:#073b22;}
+.card{background:#fff;border-radius:10px;padding:12px;margin:12px 0;box-shadow:0 4px 12px rgba(2,6,23,0.04);}
+.button{display:inline-block;padding:12px 18px;background:var(--green);color:#fff;border-radius:10px;text-decoration:none;border:none;font-weight:700;cursor:pointer;}
+.button.ghost{background:transparent;color:var(--green);border:2px solid rgba(15,157,88,0.12);}
+.input{width:100%;padding:12px;border-radius:10px;border:1px solid #e6eef0;margin:8px 0;font-size:16px;}
+.row{display:flex;gap:8px;align-items:center;}
+.center{text-align:center;}
+.small{font-size:13px;color:var(--muted);}
+.banner{width:100%;border-radius:10px;overflow:hidden;margin:8px 0;}
+.kpi{display:flex;gap:10px;justify-content:space-between;margin:6px 0;}
+.kpi .item{flex:1;background:linear-gradient(180deg,#ffffff,#f7fff7);padding:10px;border-radius:8px;text-align:center;border:1px solid rgba(15,157,88,0.06);}
+.qty{display:flex;align-items:center;gap:8px;}
+.qty button{width:40px;height:40px;border-radius:8px;border:none;background:#eefcf2;color:var(--green);font-weight:700;font-size:20px;cursor:pointer;}
+.badge{padding:6px 10px;border-radius:8px;font-weight:700;}
+.badge.pending{background:#fff7ed;color:#b45309;border:1px solid rgba(245,158,11,0.06);}
+.badge.delivered{background:#ecfdf5;color:#166534;border:1px solid rgba(16,185,129,0.06);}
+.badge.skipped{background:#fff1f2;color:#9f1239;border:1px solid rgba(239,68,68,0.06);}
+.footer{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;}
+.nav{display:flex;gap:8px;justify-content:center;margin-top:12px;}
+.nav a{color:var(--green);text-decoration:none;padding:8px 12px;border-radius:8px;border:1px solid rgba(15,157,88,0.08);}
+.splash{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:linear-gradient(180deg,#ffffff,#f0fff4);}
+.splash .logo{width:160px;height:160px;margin-bottom:12px;}

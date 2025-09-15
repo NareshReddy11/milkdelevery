@@ -1,27 +1,54 @@
 <!doctype html>
-<html><head><meta charset="utf-8"/><title>Payment</title><link rel="stylesheet" href="/static/style.css"/></head>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Payment - Shanthi Farms</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    body { background: #f7fafc; }
+    .container { max-width: 420px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
+    .header { display: flex; align-items: center; margin-bottom: 18px; }
+    .brand { font-size: 1.3em; font-weight: 700; color: #233a7d; }
+    .card { background: #f1f5fb; border-radius: 12px; padding: 24px 16px; box-shadow: 0 1px 6px #0001; margin-bottom: 18px; }
+    .center { text-align: center; }
+    .qr-img { width: 180px; height: 180px; object-fit: contain; border-radius: 12px; box-shadow: 0 1px 6px #0001; margin-bottom: 16px; }
+    .button { width: 100%; background: #3466d3; color: #fff; font-size: 1.1em; border: none; border-radius: 8px; padding: 12px; cursor: pointer; margin-top: 12px; }
+    a { color: #3466d3; text-decoration: underline; }
+    .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
+    @media (max-width: 600px) {
+      .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+      .card { padding: 16px 6px; }
+      .header { flex-direction: column; align-items: flex-start; }
+      .button { font-size: 1em; padding: 10px; }
+      .qr-img { width: 120px; height: 120px; }
+    }
+  </style>
+</head>
 <body>
   <div class="container">
     <div class="header"><div class="brand">Shanthi Farms</div></div>
-    <h3>Scan to Pay</h3>
-    <img src="/static/upi_qr.png" alt="UPI QR" style="width:200px;height:200px;"/>
-    <div>
-      <p>Scan the QR code above to pay via PhonePe / GPay / UPI.</p>
-      <p>After payment, click below:</p>
+    <div class="card center">
+      <h3 style="color:#233a7d;margin-bottom:18px;">Scan to Pay</h3>
+      <img src="/upi_qr.png" alt="UPI QR" class="qr-img"/>
+      <p style="margin-bottom:8px;">Scan the QR code above to pay via PhonePe / GPay / UPI.</p>
+      <p style="margin-bottom:8px;">After payment, click below:</p>
       <form onsubmit="markPaid(event)">
         <input type="hidden" id="orderId" th:value="${orderId}" />
-        <button type="submit">I Have Paid</button>
+        <button class="button" type="submit">I Have Paid</button>
       </form>
-      <script>
-      function markPaid(e) {
-        e.preventDefault();
-        var orderId = document.getElementById('orderId').value;
-        fetch('/orders/' + orderId + '/paid', {method: 'PATCH'})
-          .then(resp => resp.text())
-          .then(msg => { alert('Payment status: ' + msg); window.location.href = '/orders'; });
-      }
-      </script>
     </div>
-    <div style="margin-top:12px;"><a href="/home">Back</a></div>
+    <div style="margin-top:12px;" class="center"><a href="/home">Back</a></div>
+    <div class="footer">© 2025 Shanthi Farms</div>
   </div>
-</body></html>
+  <script>
+    function markPaid(e) {
+      e.preventDefault();
+      var orderId = document.getElementById('orderId').value;
+      fetch('/orders/' + orderId + '/paid', {method: 'PATCH'})
+        .then(resp => resp.text())
+        .then(msg => { alert('Payment status: ' + msg); window.location.href = '/orders'; });
+    }
+  </script>
+</body>
+</html>

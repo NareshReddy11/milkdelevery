@@ -1,32 +1,61 @@
 <!doctype html>
-<html xmlns:th="http://www.w3.org/1999/xhtml"><head><meta charset="utf-8"/><title>Admin - Shanthi Farms</title><link rel="stylesheet" href="/static/style.css"/></head>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Admin - Shanthi Farms</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    body { background: #f7fafc; }
+    .container { max-width: 480px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
+    .header { display: flex; align-items: center; margin-bottom: 24px; }
+    .logo-img { width: 48px; height: 48px; margin-right: 16px; }
+    .brand { font-size: 1.5em; font-weight: 700; color: #233a7d; }
+    .small { color: #888; font-size: 1em; margin-top: 2px; }
+    .kpi { display: flex; gap: 16px; margin: 24px 0; }
+    .item { flex: 1; background: #f1f5fb; border-radius: 10px; padding: 16px 8px; text-align: center; box-shadow: 0 1px 4px #0001; }
+    .item div:first-child { font-size: 13px; color: #3466d3; margin-bottom: 6px; }
+    .item div:last-child { font-size: 1.5em; font-weight: 600; color: #233a7d; }
+    .button { background: #3466d3; color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-size: 1em; font-weight: 500; margin-right: 8px; text-decoration: none; display: inline-block; }
+    .button.ghost { background: #e3e8f0; color: #3466d3; border: 1px solid #3466d3; }
+    .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
+    @media (max-width: 600px) {
+      .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+      .header { flex-direction: column; align-items: flex-start; }
+      .logo-img { margin-bottom: 8px; margin-right: 0; }
+      .kpi { flex-direction: column; gap: 12px; }
+      .button { width: 100%; margin-bottom: 8px; margin-right: 0; }
+    }
+  </style>
+</head>
 <body>
   <div class="container">
-    <div class="header"><div class="brand">Admin - Shanthi Farms</div></div>
-    <h3>Admin Panel</h3>
-    <div class="card"><a class="button" href="/admin/deliveries">View Deliveries</a></div>
-    <div class="card"><a class="button" href="/admin/report">Download Today Report (CSV)</a></div>
-    <div th:if="${error != null}" class="error-message">
-      <span th:text="${error}"></span>
-    </div>
-    <h3>Customers</h3>
-    <div>
-      <div th:each="c : ${customers}">
-        <div class="card">
-          <div><strong th:text="${c.name}"></strong> (<span th:text="${c.phone}"></span>)</div>
-          <div>Address: <span th:text="${c.address}"></span></div>
-          <div th:if="${c.plans != null and #lists.size(c.plans) > 0}">
-            <ul>
-              <li th:each="p : ${c.plans}">
-                <span th:text="${p.litersPerDay}"></span> L/day, <span th:text="${p.days}"></span> days, from <span th:text="${p.startDate}"></span>
-                <span th:if="${p.status != null}">[<span th:text="${p.status}"></span>]</span>
-              </li>
-            </ul>
-          </div>
-          <div th:if="${c.plans == null or #lists.size(c.plans) == 0}">No plans found.</div>
-          <a th:href="@{'/admin/customers/' + ${c.id} + '/orders'}">View Orders</a>
-        </div>
+    <div class="header">
+      <img src="/logo.png" class="logo-img"/>
+      <div style="flex:1">
+        <div class="brand">Admin - Shanthi Farms</div>
+        <div class="small">Manage deliveries & customers</div>
       </div>
     </div>
+    <div class="kpi">
+      <div class="item">
+        <div>Total Customers</div>
+        <div th:text="${totalCustomers}">--</div>
+      </div>
+      <div class="item">
+        <div>Active Plans</div>
+        <div th:text="${activePlans}">--</div>
+      </div>
+      <div class="item">
+        <div>Today's Deliveries</div>
+        <div th:text="${todayDeliveries}">--</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <a class="button" href="/admin/deliveries">View Deliveries</a>
+      <a class="button ghost" href="/admin/report">Download CSV</a>
+    </div>
+    <div class="footer">© 2025 Shanthi Farms</div>
   </div>
-</body></html>
+</body>
+</html>

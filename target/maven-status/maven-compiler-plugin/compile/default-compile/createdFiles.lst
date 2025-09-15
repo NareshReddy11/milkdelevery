@@ -9,11 +9,14 @@ com\shanthifarms\model\DeliveryRecord.class
 com\shanthifarms\model\OrderEntity.class
 com\shanthifarms\service\DeliveryService.class
 com\shanthifarms\controller\CustomerController.class
+com\shanthifarms\model\Delivery.class
 com\shanthifarms\model\Customer.class
+com\shanthifarms\repository\DeliveryRepository.class
 com\shanthifarms\service\AuthService.class
 com\shanthifarms\repository\MilkPlanRepository.class
 com\shanthifarms\controller\AuthController.class
 com\shanthifarms\service\SchedulerService.class
+com\shanthifarms\service\AdminService.class
 com\shanthifarms\MilkDeliveryApp.class
 com\shanthifarms\service\ReportService.class
 com\shanthifarms\repository\CustomerRepository.class

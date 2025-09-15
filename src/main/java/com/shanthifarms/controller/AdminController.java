@@ -27,7 +27,7 @@ public class AdminController {
         this.customerRepo = customerRepo;
     }
 
-    @GetMapping("/")
+    @GetMapping({"", "/"})
     public String adminHome(){ return "admin"; }
 
     @GetMapping("/deliveries")

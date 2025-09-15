@@ -1,52 +1,50 @@
 <!doctype html>
-<html><head><meta charset="utf-8"/><title>My Orders</title><link rel="stylesheet" href="/static/style.css"/></head>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>My Orders - Shanthi Farms</title>
+<link rel="stylesheet" href="/static/style.css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<style>
+  body { background: #f7fafc; }
+  .container { max-width: 420px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
+  .header { display: flex; align-items: center; margin-bottom: 18px; }
+  .logo-img { width: 40px; height: 40px; margin-right: 12px; }
+  .brand { font-size: 1.3em; font-weight: 700; color: #233a7d; }
+  .card { background: #f1f5fb; border-radius: 12px; padding: 18px 14px; box-shadow: 0 1px 6px #0001; margin-bottom: 14px; }
+  .center { text-align: center; }
+  .badge { padding: 4px 12px; border-radius: 8px; font-size: 0.95em; font-weight: 600; }
+  .pending { background: #fffbe6; color: #b45309; border: 1px solid #fde68a; }
+  .delivered { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .skipped { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+  .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
+  a { color: #3466d3; text-decoration: underline; }
+  @media (max-width: 600px) {
+    .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+    .header { flex-direction: column; align-items: flex-start; }
+    .logo-img { margin-bottom: 8px; margin-right: 0; }
+    .card { padding: 12px 6px; }
+  }
+</style>
+</head>
 <body>
   <div class="container">
-    <div class="header"><div class="brand">Shanthi Farms</div></div>
-    <h3>My Orders</h3>
+    <div class="header"><img src="/static/logo.png" class="logo-img"/><div class="brand">My Orders</div></div>
     <div>
-      <div th:each="o : ${orders}">
-        <div class="card">
-          <div>Order Date: <span th:text="${o.orderDate}"></span></div>
-          <div>Delivery Date: <span th:text="${o.deliveryDate}"></span></div>
-          <div>Liters: <span th:text="${o.liters}"></span></div>
-          <div>Status: <span th:text="${o.status}"></span></div>
-          <div>Payment: <span th:text="${o.paymentStatus}"></span></div>
-        </div>
-      </div>
-    </div>
-    <h3>Upcoming Deliveries</h3>
-    <div>
+      <div th:if="${records.size()}==0" class="card center">No upcoming deliveries</div>
       <div th:each="r : ${records}">
         <div class="card">
-          <div th:text="${r.deliveryDate}"></div>
-          <div>Liters: <span th:text="${r.milkPlan.litersPerDay}"></span></div>
-          <div>Status: <span class="badge" th:text="${r.status}"></span></div>
-          <div th:if="${r.status} == 'PENDING' and ${r.deliveryDate} == ${#dates.format(#dates.createNow().plusDays(1), 'yyyy-MM-dd')}">
-            <button onclick="skipDelivery([[${r.id}]])">Pause/Skip Tomorrow</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-weight:500;color:#233a7d;" th:text="${r.deliveryDate}"></div>
+            <div th:classappend=" ${r.status=='PENDING'}? 'badge pending' : (${r.status=='DELIVERED'}? 'badge delivered' : 'badge skipped')" th:text="${r.status}"></div>
           </div>
+          <div style="margin-bottom:4px;">Liters: <strong th:text="${r.milkPlan.litersPerDay}"></strong></div>
+          <div style="font-size:0.98em;color:#888;">Plan: <span th:text="${r.milkPlan.id}"></span></div>
         </div>
       </div>
     </div>
-    <h3>Place New Order</h3>
-    <form action="/orders/place" method="post">
-      <label for="plan">Select Plan:</label>
-      <select name="planId" id="plan" required>
-        <option th:each="p : ${activePlans}" th:value="${p.id}" th:text="${p.subscriptionType + ' - ' + p.litersPerDay + 'L/day'}"></option>
-      </select>
-      <label for="deliveryDate">Delivery Date:</label>
-      <input type="date" name="deliveryDate" id="deliveryDate" required>
-      <label for="liters">Liters:</label>
-      <input type="number" name="liters" id="liters" min="0.1" step="0.1" required>
-      <button type="submit">Place Order</button>
-    </form>
-    <div style="margin-top:12px;"><a href="/home">Back</a></div>
+    <div style="margin-top:12px;" class="center"><a href="/home">Back</a></div>
+    <div class="footer">© 2025 Shanthi Farms</div>
   </div>
-  <script>
-  function skipDelivery(id) {
-    fetch('/orders/' + id + '/skip', {method: 'PATCH'})
-      .then(resp => resp.text())
-      .then(msg => { alert(msg); location.reload(); });
-  }
-  </script>
-</body></html>
+</body>
+</html>
