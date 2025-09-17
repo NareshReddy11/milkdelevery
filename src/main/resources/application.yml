@@ -1,25 +1,17 @@
-server:
-  port: 8081
-
 spring:
   datasource:
     url: jdbc:h2:mem:milkdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
     password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
   h2:
     console:
       enabled: true
       path: /h2-console
 
-app:
-  cutoff-hour: 21
-  upi-qrcode: /static/upi_qr.png
-  whatsapp:
-    enabled: false
-    api-url: ""
-    token: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+

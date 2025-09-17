@@ -1,60 +1,62 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8"/>
-  <title>Login - Milk Delivery</title>
-  <link rel="stylesheet" href="/style.css"/>
-  <style>
-    .milk-icon {
-      display: block;
-      margin: 0 auto 10px auto;
-      width: 48px;
-      height: 48px;
-    }
-    .brand {
-      text-align: center;
-      font-size: 2em;
-      font-weight: 600;
-      color: #233a7d;
-      margin-bottom: 24px;
-    }
-    .center { text-align: center; }
-    .card { background: #fff; border-radius: 12px; padding: 32px 24px; box-shadow: 0 2px 8px #0001; max-width: 340px; margin: 0 auto; }
-    .input { width: 100%; padding: 12px; font-size: 1em; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 18px; }
-    .button { width: 100%; background: #3466d3; color: #fff; font-size: 1.1em; border: none; border-radius: 8px; padding: 12px; cursor: pointer; margin-bottom: 12px; }
-    .link { color: #233a7d; text-decoration: underline; cursor: pointer; display: block; margin-top: 12px; }
-    .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.9em; }
-    body { background: #fafbfc; }
-  </style>
+    <meta charset="utf-8"/>
+    <title>Login - Milk Delivery</title>
+    <link rel="stylesheet" href="/style.css"/>
+    <style>
+        .milk-icon {
+            display: block;
+            margin: 0 auto 10px auto;
+            width: 48px;
+            height: 48px;
+        }
+        .brand {
+            text-align: center;
+            font-size: 2em;
+            font-weight: 600;
+            color: #233a7d;
+            margin-bottom: 24px;
+        }
+        .center { text-align: center; }
+        .card { background: #fff; border-radius: 12px; padding: 32px 24px; box-shadow: 0 2px 8px #0001; max-width: 340px; margin: 0 auto; }
+        .input { width: 100%; padding: 12px; font-size: 1em; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 18px; }
+        .button { width: 100%; background: #3466d3; color: #fff; font-size: 1.1em; border: none; border-radius: 8px; padding: 12px; cursor: pointer; margin-bottom: 12px; }
+        .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.9em; }
+        body { background: #fafbfc; }
+    </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <div class="center">
-      <img src="/milk_bottle.png" class="milk-icon" alt="Milk Bottle"/>
-      <div class="brand">Milk Delivery</div>
+        <img src="/logo.png" class="milk-icon" alt="Shanthi Farms Logo"/>
+        <div class="brand">Milk Delivery</div>
     </div>
     <div class="card">
-      <form id="phoneForm" method="post" action="/auth/send-otp">
-        <div class="center" style="margin-bottom:18px;font-size:1.2em;">Enter your phone number</div>
-        <input class="input" name="phone" placeholder="Phone number" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')"/>
-        <button class="button" type="submit">Continue</button>
-      </form>
-      <a class="link center" id="showOtpForm">I have a OTP</a>
-      <form id="otpForm" method="post" action="/auth/verify-otp" style="display:none;">
-        <div class="center" style="margin-bottom:18px;font-size:1.2em;">Enter OTP</div>
-        <input class="input" name="phone" placeholder="Phone number" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')"/>
-        <input class="input" name="otp" placeholder="OTP" required maxlength="6"/>
-        <button class="button" type="submit">Continue</button>
-      </form>
+
+        <!-- Phone Form -->
+        <form method="post" action="/auth/send-otp" th:if="${param.phone == null}">
+            <div class="center" style="margin-bottom:18px;font-size:1.2em;">Enter your phone number</div>
+            <input class="input" name="phone" placeholder="Phone number" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')"/>
+            <button class="button" type="submit">Continue</button>
+        </form>
+
+        <!-- OTP Form -->
+        <form method="post" action="/auth/verify-otp" th:if="${param.phone != null}">
+            <div class="center" style="margin-bottom:18px;font-size:1.2em;">Enter OTP</div>
+            <input type="hidden" name="phone" th:value="${param.phone}"/>
+            <input class="input" name="otp" placeholder="OTP" required maxlength="6"/>
+            <button class="button" type="submit">Continue</button>
+        </form>
+
+        <!-- Debug OTP -->
+        <p th:if="${debugOtp != null}"
+           style="text-align:center; color:#d33; font-weight:600;">
+            [TEST MODE] OTP: <span th:text="${debugOtp}"></span>
+        </p>
+
     </div>
     <div class="footer">© 2025 Milk Delivery</div>
-  </div>
-  <script>
-    document.getElementById('showOtpForm').onclick = function() {
-      document.getElementById('phoneForm').style.display = 'none';
-      document.getElementById('otpForm').style.display = 'block';
-      this.style.display = 'none';
-    };
-  </script>
+</div>
 </body>
 </html>

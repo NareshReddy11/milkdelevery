@@ -1,50 +1,69 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8"/>
-<title>My Orders - Shanthi Farms</title>
-<link rel="stylesheet" href="/static/style.css"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<style>
-  body { background: #f7fafc; }
-  .container { max-width: 420px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
-  .header { display: flex; align-items: center; margin-bottom: 18px; }
-  .logo-img { width: 40px; height: 40px; margin-right: 12px; }
-  .brand { font-size: 1.3em; font-weight: 700; color: #233a7d; }
-  .card { background: #f1f5fb; border-radius: 12px; padding: 18px 14px; box-shadow: 0 1px 6px #0001; margin-bottom: 14px; }
-  .center { text-align: center; }
-  .badge { padding: 4px 12px; border-radius: 8px; font-size: 0.95em; font-weight: 600; }
-  .pending { background: #fffbe6; color: #b45309; border: 1px solid #fde68a; }
-  .delivered { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-  .skipped { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-  .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
-  a { color: #3466d3; text-decoration: underline; }
-  @media (max-width: 600px) {
-    .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
-    .header { flex-direction: column; align-items: flex-start; }
-    .logo-img { margin-bottom: 8px; margin-right: 0; }
-    .card { padding: 12px 6px; }
-  }
-</style>
+    <meta charset="utf-8"/>
+    <title>My Orders - Shanthi Farms</title>
+    <link rel="stylesheet" href="/static/style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- ✅ Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f7fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .container { max-width: 420px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
+        .header { display: flex; align-items: center; margin-bottom: 18px; }
+        .logo-img { width: 48px; height: 48px; margin-right: 12px; object-fit: contain; }
+        .brand { font-size: 1.3em; font-weight: 700; color: #233a7d; }
+        .card { background: #f1f5fb; border-radius: 12px; padding: 18px 14px; box-shadow: 0 1px 6px #0001; margin-bottom: 14px; }
+        .center { text-align: center; }
+        .badge { padding: 4px 12px; border-radius: 8px; font-size: 0.95em; font-weight: 600; }
+        .pending { background: #fffbe6; color: #b45309; border: 1px solid #fde68a; }
+        .delivered { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .skipped { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
+        a { color: #3466d3; text-decoration: underline; }
+        @media (max-width: 600px) {
+            .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .logo-img { margin-bottom: 8px; margin-right: 0; }
+            .card { padding: 12px 6px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header"><img src="/static/logo.png" class="logo-img"/><div class="brand">My Orders</div></div>
+<div class="container">
+    <div class="header">
+        <img th:src="@{/Truck.png}" alt="Delivery Truck" class="logo-img"/>
+        <div class="brand">My Orders</div>
+    </div>
     <div>
-      <div th:if="${records.size()}==0" class="card center">No upcoming deliveries</div>
-      <div th:each="r : ${records}">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <div style="font-weight:500;color:#233a7d;" th:text="${r.deliveryDate}"></div>
-            <div th:classappend=" ${r.status=='PENDING'}? 'badge pending' : (${r.status=='DELIVERED'}? 'badge delivered' : 'badge skipped')" th:text="${r.status}"></div>
-          </div>
-          <div style="margin-bottom:4px;">Liters: <strong th:text="${r.milkPlan.litersPerDay}"></strong></div>
-          <div style="font-size:0.98em;color:#888;">Plan: <span th:text="${r.milkPlan.id}"></span></div>
+        <div th:if="${records.size()}==0" class="card center">No upcoming deliveries</div>
+        <div th:each="r : ${records}">
+            <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <!-- Show the actual delivery date -->
+                    <div style="font-weight:500;color:#233a7d;" th:text="${r.deliveryDate}"></div>
+                    <div th:classappend="${r.status=='PENDING'}? 'badge pending' :
+                             (${r.status=='DELIVERED'}? 'badge delivered' : 'badge skipped')"
+                         th:text="${r.status}"></div>
+                </div>
+
+                <!-- ✅ Plan details -->
+                <div style="margin-bottom:4px;"><b>Liters per day:</b> <span th:text="${r.milkPlan.litersPerDay}"></span></div>
+                <div style="margin-bottom:4px;"><b>Delivery Date:</b>
+                    <span th:text="${r.deliveryDate}"></span>
+                </div>
+                <div style="margin-bottom:4px;"><b>Duration (Days):</b> <span th:text="${r.milkPlan.days}"></span></div>
+                <div style="font-size:0.98em;color:#888;"><b>Delivery Id:</b> <span th:text="${r.id}"></span></div>
+            </div>
         </div>
-      </div>
     </div>
     <div style="margin-top:12px;" class="center"><a href="/home">Back</a></div>
     <div class="footer">© 2025 Shanthi Farms</div>
-  </div>
+</div>
 </body>
 </html>

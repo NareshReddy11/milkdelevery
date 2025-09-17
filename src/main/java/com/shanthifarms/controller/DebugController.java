@@ -8,12 +8,16 @@ import java.time.LocalDate;
 @RequestMapping("/debug")
 public class DebugController {
     private final DeliveryService deliveryService;
-    public DebugController(DeliveryService deliveryService){ this.deliveryService = deliveryService; }
+
+    public DebugController(DeliveryService deliveryService) {
+        this.deliveryService = deliveryService;
+    }
 
     @PostMapping("/generate")
-    public String gen(@RequestParam(required=false) String date){
-        LocalDate d = date==null? LocalDate.now().plusDays(1) : LocalDate.parse(date);
+    public String gen(@RequestParam(required = false) String date) {
+        LocalDate d = (date == null ? LocalDate.now().plusDays(1) : LocalDate.parse(date));
         deliveryService.generateDeliveryRecordsForDate(d);
-        return "generated:"+d.toString();
+        return "generated for date: " + d.toString();
     }
 }
+

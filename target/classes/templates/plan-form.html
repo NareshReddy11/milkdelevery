@@ -37,7 +37,8 @@
       <div class="brand">Create Milk Plan</div>
     </div>
     <div class="card center">
-      <img src="/milk_bottle.png" style="width:90px;height:90px;object-fit:contain;margin-bottom:10px;"/>
+        <img src="/milk_bottle.jpg"
+             style="width:90px;height:90px;object-fit:contain;margin-bottom:10px;"/>
       <h3 style="color:#233a7d;margin-bottom:18px;">Liters per day</h3>
       <form method="post" action="/plans" id="planForm">
         <div class="qty">
@@ -49,10 +50,6 @@
         <input class="input" type="date" name="startDate" required/>
         <label>Days</label>
         <input class="input" type="number" name="days" value="30" required min="1" max="365"/>
-        <label>Subscription Type</label>
-        <select class="input" name="subscriptionType" required>
-          <option value="DAILY">Daily</option>
-          <option value="WEEKLY">Weekly</option>
         </select>
         <button class="button" type="submit">Create Plan & Pay</button>
       </form>

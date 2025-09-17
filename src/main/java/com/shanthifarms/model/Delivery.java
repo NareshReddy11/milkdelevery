@@ -11,13 +11,22 @@ public class Delivery {
 
     private LocalDate deliveryDate;
 
-    // Add other fields as needed (e.g., status, customer, etc.)
+    private String status;  // e.g., PENDING, DELIVERED, SKIPPED
 
-    // Getters and setters
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    // --- getters & setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public LocalDate getDeliveryDate() { return deliveryDate; }
     public void setDeliveryDate(LocalDate deliveryDate) { this.deliveryDate = deliveryDate; }
-}
 
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer; }
+}
