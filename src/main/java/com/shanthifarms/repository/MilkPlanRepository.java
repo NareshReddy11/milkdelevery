@@ -7,4 +7,5 @@ import java.util.List;
 public interface MilkPlanRepository extends JpaRepository<MilkPlan, Long> {
     List<MilkPlan> findByStatus(String status);
     List<MilkPlan> findByCustomerId(Long customerId);
+
 }

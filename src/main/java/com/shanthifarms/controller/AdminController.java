@@ -1,6 +1,5 @@
 package com.shanthifarms.controller;
 
-import com.shanthifarms.model.DeliveryRecord;
 import com.shanthifarms.repository.DeliveryRecordRepository;
 import com.shanthifarms.service.DeliveryService;
 import com.shanthifarms.service.ReportService;
@@ -60,7 +59,7 @@ public class AdminController {
 
     @GetMapping("/customers/{id}/orders")
     public String customerOrders(@PathVariable Long id, Model model) {
-        model.addAttribute("records", recordRepo.findByMilkPlanCustomerId(id));
+        model.addAttribute("records", recordRepo.findByMilkPlan_Customer_IdOrderByDeliveryDateDesc(id));
         return "admin-customer-orders";
     }
 }
