@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
   <title>Admin - Shanthi Farms</title>
@@ -31,7 +31,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <img src="/logo.png" class="logo-img"/>
+      <img src="/logo.png" class="logo-img" alt="Shanthi Farms Logo"/>
       <div style="flex:1">
         <div class="brand">Admin - Shanthi Farms</div>
         <div class="small">Manage deliveries & customers</div>
@@ -51,9 +51,10 @@
         <div th:text="${todayDeliveries}">--</div>
       </div>
     </div>
-    <div style="margin-top:12px;">
-      <a class="button" href="/admin/deliveries">View Deliveries</a>
-      <a class="button ghost" href="/admin/report">Download CSV</a>
+    <div class="actions" style="margin-bottom:18px;">
+      <a href="/admin/customers" class="button">Manage Customers</a>
+      <a href="/admin/deliveries" class="button">View Deliveries</a>
+      <a href="/admin/report" class="button ghost">Download Report</a>
     </div>
     <div class="footer">© 2025 Shanthi Farms</div>
   </div>

@@ -3,36 +3,173 @@
 <head>
   <meta charset="utf-8"/>
   <title>Account - Shanthi Farms</title>
-  <link rel="stylesheet" href="/static/style.css"/>
+  <link rel="stylesheet" href="/style.css"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
-    body { background: #f7fafc; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
-    .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px #0002; padding: 32px 24px; }
-    h3 { color: #233a7d; margin-bottom: 24px; text-align: center; font-size: 2em; font-weight: 700; }
-    .section-title { color: #3466d3; font-size: 1.25em; font-weight: 700; margin: 32px 0 16px 0; }
-    .card { background: #f1f5fb; border-radius: 12px; box-shadow: 0 1px 6px #0001; padding: 20px 18px; margin-bottom: 18px; }
-    .user-info { margin-bottom: 18px; }
-    .user-info div { font-size: 1.1em; margin-bottom: 6px; }
-    .address-list { margin: 0; padding: 0; list-style: none; }
-    .address-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px #0001; padding: 16px 18px; margin-bottom: 14px; display: flex; flex-direction: column; }
-    .address-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-    .address-label { font-weight: 700; font-size: 1.1em; color: #233a7d; }
-    .address-default { color: #25D366; font-weight: 700; font-size: 0.98em; margin-left: 8px; }
-    .address-actions { display: flex; gap: 10px; margin-top: 10px; }
-    .btn { background: #3466d3; color: #fff; border: none; border-radius: 6px; padding: 7px 16px; font-size: 1em; cursor: pointer; font-weight: 600; transition: background 0.2s; }
-    .btn:hover { background: #233a7d; }
-    .add-btn { background: #e6f0ff; color: #3466d3; border: none; border-radius: 8px; padding: 7px 16px; font-size: 1em; font-weight: 600; margin-top: 8px; cursor: pointer; transition: background 0.2s; }
-    .add-btn:hover { background: #d0e2ff; color: #233a7d; }
-    .plans-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    .plans-table th, .plans-table td { padding: 10px 8px; border-bottom: 1px solid #e0e7ef; text-align: left; }
-    .plans-table th { background: #f1f5fb; color: #233a7d; font-weight: 600; }
-    .plan-status { padding: 4px 10px; border-radius: 8px; font-size: 0.98em; font-weight: 600; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .actions { margin-top: 24px; text-align: center; }
-    .nav-link { color: #3466d3; font-weight: 600; text-decoration: none; margin-left: 18px; border-radius: 8px; padding: 7px 16px; background: #e6f0ff; transition: background 0.2s; }
-    .nav-link:hover { color: #233a7d; background: #d0e2ff; text-decoration: underline; }
-    .footer { text-align: center; color: #888; margin-top: 32px; font-size: 0.98em; }
+    body {
+      background: radial-gradient(ellipse 80% 80% at 50% 20%, #7f9cf5 0%, #6ee7b7 100%) fixed;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.10);
+      border-radius: 32px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+      padding: 56px 36px 36px 36px;
+      backdrop-filter: blur(16px);
+      text-align: center;
+    }
+    h3 {
+      color: #1a2343;
+      margin-bottom: 32px;
+      text-align: center;
+      font-size: 2.4em;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .section-title {
+      color: #2563eb;
+      font-size: 1.25em;
+      font-weight: 700;
+      margin: 32px 0 16px 0;
+      text-align: left;
+    }
+    .card {
+      background: rgba(255,255,255,0.18);
+      border-radius: 20px;
+      box-shadow: 0 2px 12px #0001;
+      padding: 28px 22px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(8px);
+      text-align: left;
+    }
+    .user-info {
+      margin-bottom: 18px;
+      font-size: 1.15em;
+      color: #1a2343;
+      font-weight: 500;
+    }
+    .user-info div {
+      margin-bottom: 8px;
+    }
+    .address-list {
+      margin: 0; padding: 0; list-style: none;
+    }
+    .address-card {
+      background: rgba(255,255,255,0.85);
+      border-radius: 14px;
+      box-shadow: 0 1px 8px #0001;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .address-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .address-label {
+      font-weight: 700;
+      font-size: 1.1em;
+      color: #2563eb;
+    }
+    .address-default {
+      color: #25D366;
+      font-weight: 700;
+      font-size: 0.98em;
+      margin-left: 8px;
+    }
+    .address-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btn {
+      background: linear-gradient(90deg, #34d399 0%, #38bdf8 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-size: 1em;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(52,211,153,0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(16,185,129,0.18);
+    }
+    .btn.delete {
+      background: linear-gradient(90deg, #ef4444 0%, #f59e42 100%);
+    }
+    .add-btn {
+      background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-size: 1em;
+      font-weight: 600;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(52,211,153,0.08);
+      display: inline-block;
+    }
+    .add-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(56,189,248,0.18);
+    }
+    .actions {
+      margin-top: 32px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .nav-link {
+      background: linear-gradient(90deg, #34d399 0%, #38bdf8 100%);
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 10px 22px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(52,211,153,0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-link:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(16,185,129,0.18);
+      text-decoration: underline;
+    }
+    .footer {
+      text-align: center;
+      color: #e0e7ef;
+      margin-top: 32px;
+      font-size: 0.98em;
+    }
+    .address-value {
+      word-break: break-word;
+      overflow-wrap: break-word;
+      color: #444;
+      margin-bottom: 4px;
+      max-width: 100%;
+      display: block;
+    }
     @media (max-width: 700px) {
       .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+      .actions { flex-direction: column; gap: 12px; }
     }
   </style>
 </head>
@@ -52,17 +189,32 @@
             <span class="address-label" th:text="${addr.label}"></span>
             <span th:if="${addr.isDefault}" class="address-default">Default</span>
           </div>
-          <div th:text="${addr.address}" style="color:#444; margin-bottom: 4px;"></div>
+          <div class="address-value" th:text="${addr.address}"></div>
           <div class="address-actions">
-            <button type="button" th:if="!${addr.isDefault}" th:attr="onclick='setDefaultAddress(' + ${addr.id} + ')'" class="btn">Set as Default</button>
-            <button type="button" th:attr="onclick='deleteAddress(' + ${addr.id} + ')'" class="btn" style="background:#e53e3e;">Delete</button>
+            <button type="button" th:if="!${addr.isDefault}" th:attr="onclick='setDefaultAddress(' + ${addr.id} + ')'" class="btn">
+              <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 2v14M2 9h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+              Set as Default
+            </button>
+            <button type="button" th:attr="onclick='deleteAddress(' + ${addr.id} + ')'" class="btn delete">
+              <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4l10 10M14 4L4 14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+              Delete
+            </button>
           </div>
         </li>
       </ul>
       <div th:if="${addresses == null or #lists.size(addresses) == 0}" style="text-align:center; color:#888;">No addresses found.</div>
       <div class="actions"><a th:href="@{/add-address}" class="add-btn">+ Add Address</a></div>
     </div>
-    <div class="actions"><a href="/home" class="nav-link">Back</a> <a href="/logout" class="nav-link">Logout</a></div>
+    <div class="actions">
+      <a href="/home" class="nav-link">
+        <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 16l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Back
+      </a>
+      <a href="/logout" class="nav-link">
+        <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 2v14M2 9h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Logout
+      </a>
+    </div>
     <div class="footer">© 2025 Shanthi Farms</div>
   </div>
   <script>

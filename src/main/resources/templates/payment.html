@@ -1,30 +1,163 @@
 <!doctype html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Payment - Shanthi Farms</title>
     <link rel="stylesheet" href="/static/style.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <style>
-        body { background: #f7fafc; }
-        .container { max-width: 420px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
-        .header { display: flex; align-items: center; margin-bottom: 18px; }
-        .logo-img { width: 48px; height: 48px; margin-right: 12px; }
-        .brand { font-size: 1.3em; font-weight: 700; color: #233a7d; }
-        .small { color: #888; font-size: 0.95em; margin-top: 2px; }
-        .card { background: #f1f5fb; border-radius: 12px; padding: 24px 16px; box-shadow: 0 1px 6px #0001; margin-bottom: 18px; }
-        .center { text-align: center; }
-        .qr-img { width: 180px; height: 180px; object-fit: contain; border-radius: 12px; box-shadow: 0 1px 6px #0001; margin-bottom: 16px; }
-        .button { width: 100%; background: #3466d3; color: #fff; font-size: 1.1em; border: none; border-radius: 8px; padding: 12px; cursor: pointer; margin-top: 12px; }
-        a { color: #3466d3; text-decoration: underline; }
-        .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
-        @media (max-width: 600px) {
+        body {
+            background: linear-gradient(120deg, #16c1a6 0%, #3a8dde 100%) fixed;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 480px;
+            width: 100%;
+            margin: 48px auto;
+            background: linear-gradient(120deg, #e0f7fa 0%, #cbe7ff 100%);
+            border-radius: 32px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.13);
+            padding: 40px 32px 32px 32px;
+            text-align: center;
+            position: relative;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            justify-content: flex-start;
+        }
+        .logo-img {
+            width: 64px; height: 64px; margin-right: 18px;
+        }
+        .brand {
+            font-size: 2em; font-weight: 900; color: #2176e7;
+        }
+        .subtitle {
+            color: #2d4e6f; font-size: 1.15em; margin-top: 2px; font-weight: 500;
+        }
+        .qr-card {
+            background: #2176e7;
+            border-radius: 18px;
+            padding: 28px 18px 18px 18px;
+            box-shadow: 0 2px 12px #2176e722;
+            margin-bottom: 18px;
+            color: #fff;
+        }
+        .qr-title {
+            font-size: 1.25em;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+        .qr-img {
+            width: 180px; height: 180px; object-fit: contain; border-radius: 12px; box-shadow: 0 1px 6px #0001; margin-bottom: 16px;
+            background: #fff;
+            padding: 8px;
+        }
+        .pay-icons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .pay-icon {
+            height: 32px;
+        }
+        .button {
+            width: 100%;
+            background: linear-gradient(90deg, #2176e7 0%, #3a8dde 100%);
+            color: #fff;
+            font-size: 1.15em;
+            font-weight: 900;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px #2176e722;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .button:visited, .button:active, .button:focus {
+            color: #fff;
+            text-decoration: none;
+            outline: none;
+        }
+        .button .check {
+            font-size: 1.3em;
+        }
+        .summary {
+            margin: 18px 0 12px 0;
+            font-size: 1.08em;
+            color: #233a7d;
+            font-weight: 500;
+        }
+        .summary .amount, .summary .price {
+            color: #d32f2f;
+            font-weight: 700;
+        }
+        .address-card {
+            background: #e0f7fa;
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin: 18px auto 0 auto;
+            max-width: 340px;
+            text-align: left;
+            box-shadow: 0 2px 8px #2176e722;
+        }
+        .address-label {
+            font-weight: 700;
+            color: #2176e7;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .address-label .loc {
+            font-size: 1.2em;
+            color: #2176e7;
+        }
+        .address-value {
+            word-break: break-word;
+            overflow-wrap: break-word;
+            color: #233a7d;
+            font-size: 1em;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .change-link {
+            color: #2176e7;
+            text-decoration: underline;
+            font-size: 1em;
+            margin-top: 4px;
+            display: inline-block;
+        }
+        .back-link {
+            color: #2176e7;
+            font-size: 1.15em;
+            text-decoration: underline;
+            margin-top: 18px;
+            display: inline-block;
+            font-weight: 700;
+        }
+        @media (max-width: 700px) {
             .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
-            .card { padding: 16px 6px; }
+            .qr-card { padding: 16px 6px; }
             .header { flex-direction: column; align-items: flex-start; }
-            .logo-img { margin-bottom: 8px; margin-right: 0; }
+            .logo-img { margin-bottom: 8px; margin-right: 0; width: 48px; height: 48px; }
+            .brand { font-size: 1.3em; }
             .button { font-size: 1em; padding: 10px; }
             .qr-img { width: 120px; height: 120px; }
+            .address-card { max-width: 98vw; }
         }
     </style>
 </head>
@@ -34,34 +167,37 @@
         <img src="/logo.png" class="logo-img" alt="Shanthi Farms Logo"/>
         <div>
             <div class="brand">Shanthi Farms</div>
-            <div class="small">Delivering fresh milk everyday</div>
+            <div class="subtitle">Secure Online Payment</div>
         </div>
     </div>
-    <div class="card center">
-        <h3 style="color:#233a7d;margin-bottom:18px;">Scan to Pay</h3>
+    <div class="qr-card">
+        <div class="qr-title">Scan to Pay</div>
         <img src="/HDFC.jpeg" alt="UPI QR" class="qr-img"/>
-        <p style="margin-bottom:8px;">Scan the QR code above to pay via PhonePe / GPay / UPI.</p>
-        <p style="margin-bottom:8px;">After payment, click below:</p>
-        <form onsubmit="markPaid(event)">
-            <input type="hidden" id="orderId" th:value="${orderId}" />
-            <button class="button" type="submit">I Have Paid</button>
-        </form>
-        <div style="margin-bottom:18px; color:#233a7d; font-weight:500;">
-            <div>Total liters: <span th:text="${plan.days * plan.litersPerDay}"></span></div>
-            <div>Milk price: ₹<span th:text="${pricePerLiter}"></span> per liter</div>
-            <div>Total amount: <span style="color:#d32f2f; font-weight:700;">₹<span th:text="${totalAmount}"></span></span></div>
-            <div style="margin-top:14px;">
-                <b>Delivery Address:</b><br/>
-                <span th:if="${address != null}" th:text="${address.label + ': ' + address.address}"></span>
-                <span th:if="${address == null}" style="color:#c00;">No address selected!</span>
-                <div style="margin-top:8px;">
-                    <a th:href="@{'/select-address?orderId=' + ${orderId}}" style="color:#3466d3; text-decoration:underline;">Change Address</a>
-                </div>
-            </div>
+        <div class="pay-icons">
+            <img src="/static/phonepe.png" alt="PhonePe" class="pay-icon"/>
+            <img src="/static/gpay.png" alt="GPay" class="pay-icon"/>
+            <img src="/static/paytm.png" alt="Paytm" class="pay-icon"/>
         </div>
+        <div style="margin-bottom:8px; color:#e0f7fa; font-weight:500;">Scan the QR code above to pay via PhonePe / GPay / UPI</div>
     </div>
-    <div style="margin-top:12px;" class="center"><a href="/home">Back</a></div>
-    <div class="footer">© 2025 Shanthi Farms</div>
+    <form onsubmit="markPaid(event)" style="margin-bottom:0;">
+        <input type="hidden" id="orderId" th:value="${orderId}" />
+        <button class="button" type="submit"><span class="check">✅</span> I Have Paid</button>
+    </form>
+    <div class="summary">
+        Total Liters: <span th:text="${plan.days * plan.litersPerDay}"></span><br/>
+        Milk Price: <span th:text="'₹' + ${pricePerLiter}" class="price"></span><br/>
+        Total amount: <span th:text="'₹' + ${totalAmount}" class="amount"></span>
+    </div>
+    <div class="address-card">
+        <div class="address-label"><span class="loc">📍</span> Delivery Address</div>
+        <div class="address-value">
+            <span th:text="${address.label}"></span><br/>
+            <span th:text="${address.address}"></span>
+        </div>
+        <a th:href="@{/select-address(orderId=${orderId})}" class="change-link">Change Address</a>
+    </div>
+    <a href="/orders" class="back-link">Back</a>
 </div>
 <script>
     function markPaid(e) {

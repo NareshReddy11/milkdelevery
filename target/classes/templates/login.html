@@ -2,64 +2,53 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Login - Milk Delivery</title>
+    <title>Login - Shanthi Farms</title>
     <link rel="stylesheet" href="/style.css"/>
-    <style>
-        .milk-icon {
-            display: block;
-            margin: 0 auto 10px auto;
-            width: 56px;
-            height: 56px;
-        }
-        .brand {
-            text-align: center;
-            font-size: 2.2em;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 24px;
-        }
-        .center { text-align: center; }
-        .card { background: #fff; border-radius: 18px; padding: 40px 28px; box-shadow: 0 4px 16px #0002; max-width: 360px; margin: 0 auto; }
-        .input { width: 100%; padding: 14px; font-size: 1.1em; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 22px; }
-        .button { width: 100%; background: #3466d3; color: #fff; font-size: 1.15em; border: none; border-radius: 10px; padding: 14px; cursor: pointer; margin-bottom: 14px; transition: background 0.2s, box-shadow 0.2s; }
-        .button:hover { background: #233a7d; box-shadow: 0 2px 8px #3466d355; }
-        .footer { text-align: center; margin-top: 40px; color: #e3f9e5; font-size: 1em; }
-        body { background: #3466d3; }
-        a { color: #e3f9e5; text-decoration: underline; transition: color 0.2s; }
-        a:hover { color: #fff; text-decoration: underline; }
-    </style>
 </head>
-<body style="background:#3466d3;">
-<div class="container" style="max-width:420px; margin:48px auto; background:#3466d3; border-radius:24px; box-shadow:0 2px 16px #0003; padding:40px 28px;">
-    <div class="center">
-        <img src="/logo.png" class="milk-icon" alt="Shanthi Farms Logo" style="margin-bottom:18px;"/>
-        <div class="brand" style="color:#fff; font-size:2em; font-weight:700; margin-bottom:8px;">Login</div>
-        <div class="welcome center" style="color:#e3f9e5; font-size:1.1em; margin-bottom:18px; font-weight:500;">Welcome! Please login to continue.</div>
-    </div>
-    <div class="card" style="background:#3466d3; border-radius:18px; box-shadow:none; padding:32px 18px;">
-        <!-- Phone Form -->
-        <form method="post" action="/auth/send-otp" th:if="${param.phone} == null">
-            <label for="phone" class="center" style="margin-bottom:18px;font-size:1.2em; color:#fff; font-weight:500; display:block;">Mobile Number</label>
-            <input id="phone" class="input" name="phone" placeholder="Mobile Number" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="background:#fff; color:#265d3a; border-radius:10px; margin-bottom:16px;"/>
-            <label for="name" class="center" style="margin-bottom:8px;font-size:1.1em; color:#fff; font-weight:500; display:block;">Full Name</label>
-            <input id="name" class="input" name="name" placeholder="Full Name" required style="background:#fff; color:#265d3a; border-radius:10px; margin-bottom:16px;"/>
-            <button class="button" type="submit" style="background:#25D366; color:#fff; font-size:1.1em; border-radius:10px; padding:12px; margin-bottom:8px;">Get OTP</button>
-        </form>
-        <!-- OTP Form -->
-        <form method="post" action="/auth/verify-otp" th:if="${param.phone} != null">
-            <label for="otp" class="center" style="margin-bottom:18px;font-size:1.2em; color:#fff; font-weight:500; display:block;">Enter OTP</label>
-            <div th:if="${debugOtp != null}" style="color:#fff; margin-bottom:10px;">
-                <b>Test OTP:</b> <span th:text="${debugOtp}"></span>
-            </div>
-            <input type="hidden" name="phone" th:value="${param.phone}"/>
-            <input type="hidden" name="name" th:value="${param.name}"/>
-            <input type="hidden" name="address" th:value="${param.address}"/>
-            <input id="otp" class="input" name="otp" placeholder="OTP" required maxlength="6" style="background:#fff; color:#265d3a; border-radius:10px; margin-bottom:16px;"/>
-            <button class="button" type="submit" style="background:#25D366; color:#fff; font-size:1.1em; border-radius:10px; padding:12px; margin-bottom:8px;">Verify</button>
-            <div class="center" style="margin-top:8px;" th:if="${param.phone != null}"><a th:href="@{/auth/send-otp(phone=${param.phone})}" style="color:#e3f9e5; text-decoration:underline; font-size:0.98em;">Resend OTP</a></div>
-        </form>
-    </div>
-    <div class="footer" style="text-align:center; margin-top:32px; color:#e3f9e5; font-size:0.95em;">© 2025 Shanthi Farms</div>
+<body class="login-page">
+<div class="container">
+    <img src="/logo.png" class="logo" alt="Shanthi Farms Logo"/>
+    <div class="brand">Login</div>
+    <div class="welcome">Welcome! Please login to continue.</div>
+    <div style="color: #ff0; font-weight: bold; margin-bottom: 12px;">TEST OTP: <span th:text="${debugOtp}"></span></div>
+
+    <!-- Phone Form -->
+    <form method="post" action="/auth/send-otp" th:if="${param.phone} == null" style="width:100%">
+        <div class="input-group">
+            <span class="input-icon">
+                <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 16.5C4 15.1193 5.11929 14 6.5 14H13.5C14.8807 14 16 15.1193 16 16.5V17C16 17.5523 15.5523 18 15 18H5C4.44772 18 4 17.5523 4 17V16.5Z" stroke="white" stroke-width="1.5"/><rect x="6" y="3" width="8" height="6" rx="3" stroke="white" stroke-width="1.5"/></svg>
+            </span>
+            <input id="phone" class="input" name="phone" placeholder="Mobile Number"
+                   required pattern="[0-9]{10}" maxlength="10" inputmode="numeric"
+                   oninput="this.value=this.value.replace(/[^0-9]/g,'')"/>
+        </div>
+        <div class="input-group">
+            <span class="input-icon">
+                <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="7" r="4" stroke="white" stroke-width="1.5"/><path d="M2 17C2 13.6863 5.13401 11 9 11H11C14.866 11 18 13.6863 18 17" stroke="white" stroke-width="1.5"/></svg>
+            </span>
+            <input id="name" class="input" name="name" placeholder="Full Name" required/>
+        </div>
+        <button class="button" type="submit">Get OTP</button>
+    </form>
+
+    <!-- OTP Form -->
+    <form method="post" action="/auth/verify-otp" th:if="${param.phone} != null" style="width:100%">
+        <div class="input-group">
+            <span class="input-icon">
+                <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="12" height="8" rx="2" stroke="white" stroke-width="1.5"/><path d="M10 12V14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <input id="otp" class="input" name="otp" placeholder="OTP" required maxlength="6"/>
+        </div>
+        <input type="hidden" name="phone" th:value="${param.phone}"/>
+        <input type="hidden" name="name" th:value="${param.name}"/>
+        <input type="hidden" name="address" th:value="${param.address}"/>
+        <button class="button" type="submit">Verify</button>
+        <div style="margin-top:10px;" th:if="${param.phone != null}">
+            <a th:href="@{/auth/send-otp(phone=${param.phone})}" style="color:#e0e7ef;text-decoration:underline;">Resend OTP</a>
+        </div>
+    </form>
+
+    <div class="footer">© 2025 Shanthi Farms</div>
 </div>
 </body>
 </html>

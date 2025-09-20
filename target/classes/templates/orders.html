@@ -3,67 +3,221 @@
 <head>
     <meta charset="utf-8"/>
     <title>My Orders - Shanthi Farms</title>
-    <link rel="stylesheet" href="/static/style.css"/>
+    <link rel="stylesheet" href="/style.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <style>
-        body { background: #f7fafc; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
-        .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px #0002; padding: 32px 24px; }
-        h3 { color: #233a7d; margin-bottom: 24px; text-align: center; font-size: 2em; font-weight: 700; }
-        .section-title { color: #3466d3; font-size: 1.25em; font-weight: 700; margin: 32px 0 16px 0; }
-        .card { background: #f1f5fb; border-radius: 12px; box-shadow: 0 1px 6px #0001; padding: 20px 18px; margin-bottom: 18px; }
-        .orders-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-        .orders-table th, .orders-table td { padding: 10px 8px; border-bottom: 1px solid #e0e7ef; text-align: left; }
-        .orders-table th { background: #f1f5fb; color: #233a7d; font-weight: 600; }
-        .order-status { padding: 4px 10px; border-radius: 8px; font-size: 0.98em; font-weight: 600; }
-        .pending { background: #e6f9f0; color: #25D366; border: 1px solid #25D366; }
-        .delivered { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-        .skipped { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-        .actions { margin-top: 24px; text-align: center; }
-        .nav-link { color: #3466d3; font-weight: 600; text-decoration: none; margin-left: 18px; border-radius: 8px; padding: 7px 16px; background: #e6f0ff; transition: background 0.2s; }
-        .nav-link:hover { color: #233a7d; background: #d0e2ff; text-decoration: underline; }
-        .footer { text-align: center; color: #888; margin-top: 32px; font-size: 0.98em; }
+        body {
+            background: radial-gradient(ellipse 80% 80% at 50% 20%, #7f9cf5 0%, #6ee7b7 100%) fixed;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.10);
+            border-radius: 32px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+            padding: 56px 36px 36px 36px;
+            backdrop-filter: blur(16px);
+            text-align: center;
+        }
+        h3 {
+            color: #1a2343;
+            margin-bottom: 32px;
+            text-align: center;
+            font-size: 2.4em;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .orders-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 12px #0001;
+            overflow: hidden;
+        }
+        .orders-table thead th {
+            background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.08em;
+            padding: 16px 8px;
+            border: none;
+        }
+        .orders-table tbody td {
+            padding: 14px 8px;
+            font-size: 1.05em;
+            border: none;
+            background: rgba(255,255,255,0.85);
+        }
+        .order-status {
+            display: inline-block;
+            padding: 7px 22px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #34d399 0%, #38bdf8 100%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1em;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(52,211,153,0.08);
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 32px;
+        }
+        .btn {
+            background: linear-gradient(90deg, #34d399 0%, #38bdf8 100%);
+            color: #fff;
+            font-size: 1.08rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 32px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(52,211,153,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 18px rgba(16,185,129,0.18);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            color: #e0e7ef;
+            font-size: 0.95rem;
+        }
         @media (max-width: 700px) {
-            .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+            .container {
+                max-width: 98vw;
+                padding: 32px 8px 24px 8px;
+            }
+            .orders-table thead th, .orders-table tbody td {
+                font-size: 0.95em;
+                padding: 10px 4px;
+            }
+            .actions {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        /* Modal styles */
+        #orderModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.25);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+        #orderModal > div {
+            background: #fff;
+            border-radius: 20px;
+            max-width: 380px;
+            width: 90vw;
+            padding: 32px 24px;
+            box-shadow: 0 8px 32px #0003;
+            position: relative;
+        }
+        #orderModal button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #2176e7;
         }
     </style>
 </head>
-<body>
+<body class="orders-page">
 <div class="container">
     <h3>My Orders</h3>
-    <div class="section-title">Order History:</div>
-    <div class="card">
-        <div th:if="${orders.size()}==0" style="text-align:center; color:#888;">No orders found</div>
-        <div th:if="${orders.size()} > 0">
-            <table class="orders-table">
-                <thead>
-                    <tr>
-                        <th>Order Date</th>
-                        <th>Plan Start</th>
-                        <th>Duration</th>
-                        <th>Liters/Day</th>
-                        <th>Total Liters</th>
-                        <th>Payment</th>
-                        <th>Status</th>
-                        <th>Order ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="o : ${orders}">
-                        <td th:text="${o.orderDate}"></td>
-                        <td th:text="${o.plan.startDate}"></td>
-                        <td th:text="${o.plan.days}"></td>
-                        <td th:text="${o.plan.litersPerDay}"></td>
-                        <td th:text="${o.plan.days * o.plan.litersPerDay}"></td>
-                        <td th:text="${o.paymentStatus}"></td>
-                        <td><span th:classappend="${o.status=='CONFIRMED'}? 'order-status pending' : (${o.status=='DELIVERED'}? 'order-status delivered' : 'order-status skipped')" th:text="${o.status}"></span></td>
-                        <td th:text="${o.id}"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div style="margin-bottom:12px;">Order History:</div>
+    <table class="orders-table">
+        <thead>
+            <tr>
+                <th>Order Date</th>
+                <th>Plan Start</th>
+                <th>Duration</th>
+                <th>Liters/Day</th>
+                <th>Liters</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="o : ${orders}" th:onclick="|showOrderModal('${o.id}')|" style="cursor:pointer;">
+                <td th:text="${o.orderDate}"></td>
+                <td th:text="${o.plan.startDate}"></td>
+                <td th:text="${o.plan.days}"></td>
+                <td th:text="${o.plan.litersPerDay}"></td>
+                <td th:text="${o.liters}"></td>
+                <td><span class="order-status" th:text="${o.status}"></span></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="actions">
+        <a href="/home" class="btn">Back</a>
+        <a href="/account" class="btn">Account</a>
     </div>
-    <div class="actions"><a href="/home" class="nav-link">Back</a> <a href="/account" class="nav-link">Account</a></div>
     <div class="footer">© 2025 Shanthi Farms</div>
 </div>
+
+<!-- Modal for order details -->
+<div id="orderModal">
+    <div>
+        <button onclick="closeOrderModal()">&times;</button>
+        <div id="orderModalContent"></div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var ordersData = [
+        /*[# th:each="o : ${orders}" ]*/
+        {
+            id: [[${o.id}]],
+            orderDate: '[[${o.orderDate}]]',
+            planStart: '[[${o.plan.startDate}]]',
+            duration: '[[${o.plan.days}]]',
+            litersPerDay: '[[${o.plan.litersPerDay}]]',
+            liters: '[[${o.liters}]]',
+            status: '[[${o.status}]]',
+            paymentStatus: '[[${o.paymentStatus}]]',
+            address: '[[${o.address != null ? o.address.label + " - " + o.address.address : "N/A"}]]'
+        },
+        /*[/]*/
+    ];
+    function showOrderModal(orderId) {
+        var order = ordersData.find(o => o.id == orderId);
+        if (!order) return;
+        var html = `<h4 style='color:#2176e7;font-weight:700;margin-bottom:12px;'>Order Details</h4>
+            <div><b>Order Date:</b> ${order.orderDate}</div>
+            <div><b>Plan Start:</b> ${order.planStart}</div>
+            <div><b>Duration:</b> ${order.duration} days</div>
+            <div><b>Liters/Day:</b> ${order.litersPerDay}</div>
+            <div><b>Total Liters:</b> ${order.liters}</div>
+            <div><b>Status:</b> ${order.status}</div>
+            <div><b>Payment Status:</b> ${order.paymentStatus}</div>
+            <div><b>Address:</b> ${order.address}</div>`;
+        document.getElementById('orderModalContent').innerHTML = html;
+        document.getElementById('orderModal').style.display = 'flex';
+    }
+    function closeOrderModal() {
+        document.getElementById('orderModal').style.display = 'none';
+    }
+</script>
 </body>
 </html>

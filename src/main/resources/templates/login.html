@@ -10,6 +10,7 @@
     <img src="/logo.png" class="logo" alt="Shanthi Farms Logo"/>
     <div class="brand">Login</div>
     <div class="welcome">Welcome! Please login to continue.</div>
+    <div style="color: #ff0; font-weight: bold; margin-bottom: 12px;">TEST OTP: <span th:text="${debugOtp}"></span></div>
 
     <!-- Phone Form -->
     <form method="post" action="/auth/send-otp" th:if="${param.phone} == null" style="width:100%">

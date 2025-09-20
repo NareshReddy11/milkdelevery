@@ -54,7 +54,7 @@ public class AdminController {
     @GetMapping("/customers")
     public String customers(Model model) {
         model.addAttribute("customers", customerRepo.findAll());
-        return "admin";
+        return "admin-customers";
     }
 
     @GetMapping("/customers/{id}/orders")
