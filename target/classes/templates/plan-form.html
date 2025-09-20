@@ -3,82 +3,284 @@
 <head>
   <meta charset="utf-8"/>
   <title>Create Plan - Shanthi Farms</title>
-  <link rel="stylesheet" href="/static/style.css"/>
+  <link rel="stylesheet" href="/style.css"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
-    body { background: #f7fafc; }
-    .container { max-width: 420px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
-    .header { display: flex; align-items: center; margin-bottom: 18px; }
-    .logo-img { width: 40px; height: 40px; margin-right: 12px; }
-    .brand { font-size: 1.3em; font-weight: 700; color: #233a7d; }
-    .card { background: #f1f5fb; border-radius: 12px; padding: 24px 16px; box-shadow: 0 1px 6px #0001; margin-bottom: 18px; }
-    .center { text-align: center; }
-    .qty { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; }
-    .qty button { width: 32px; height: 32px; font-size: 1.3em; border-radius: 8px; border: none; background: #e3e8f0; color: #233a7d; cursor: pointer; }
-    .qty input { font-size: 1.2em; border-radius: 8px; border: 1px solid #ddd; padding: 6px; width: 80px; text-align: center; }
-    label { display: block; margin: 12px 0 4px 0; font-weight: 500; color: #3466d3; }
-    .input { width: 100%; padding: 10px; font-size: 1em; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 8px; }
-    .button { width: 100%; background: #3466d3; color: #fff; font-size: 1.1em; border: none; border-radius: 8px; padding: 12px; cursor: pointer; margin-top: 12px; }
-    a { color: #3466d3; text-decoration: underline; }
-    .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
-    @media (max-width: 600px) {
-      .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
-      .card { padding: 16px 6px; }
-      .header { flex-direction: column; align-items: flex-start; }
-      .logo-img { margin-bottom: 8px; margin-right: 0; }
-      .button { font-size: 1em; padding: 10px; }
+    body {
+      background: linear-gradient(120deg, #16c1a6 0%, #3a8dde 100%) fixed;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .main-card {
+      max-width: 480px;
+      width: 100%;
+      margin: 48px auto;
+      background: linear-gradient(120deg, #e0f7fa 0%, #cbe7ff 100%);
+      border-radius: 36px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.13);
+      padding: 40px 32px 32px 32px;
+      text-align: center;
+      position: relative;
+    }
+    .logo-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px #0001;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -40px;
+      left: 32px;
+    }
+    .logo-img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+    .main-title {
+      font-size: 2.2em;
+      font-weight: 900;
+      color: #2176e7;
+      margin-top: 48px;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      font-size: 1.18em;
+      color: #2d4e6f;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    .milk-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 2px 16px #2176e733;
+      margin-bottom: 18px;
+      background: #2176e7;
+      border: 6px solid #fff;
+    }
+    .form-label {
+      font-size: 1.5em;
+      font-weight: 900;
+      color: #2176e7;
+      margin-bottom: 12px;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .qty-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .qty-btn {
+      width: 56px;
+      height: 56px;
+      font-size: 2em;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(90deg, #2176e7 0%, #3a8dde 100%);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 900;
+      box-shadow: 0 2px 8px #2176e722;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qty-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 18px #2176e733;
+    }
+    .qty-value {
+      font-size: 1.5em;
+      font-weight: 800;
+      background: #fff;
+      color: #2176e7;
+      border-radius: 16px;
+      border: none;
+      width: 70px;
+      height: 56px;
+      text-align: center;
+      box-shadow: 0 1px 6px #2176e711;
+      margin: 0 2px;
+    }
+    .days-label {
+      font-size: 1.3em;
+      font-weight: 900;
+      color: #2176e7;
+      margin-bottom: 8px;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .days-input {
+      width: 90%;
+      max-width: 340px;
+      font-size: 1.5em;
+      font-weight: 800;
+      border-radius: 24px;
+      border: none;
+      background: #fff;
+      color: #2176e7;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 6px #2176e711;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+    .info-section {
+      margin: 18px 0 8px 0;
+      color: #2176e7;
+      font-weight: 900;
+      font-size: 1.18em;
+      text-align: center;
+    }
+    .info-desc {
+      font-size: 1.08em;
+      color: #2d4e6f;
+      font-weight: 500;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .price-row {
+      font-size: 1.15em;
+      color: #2176e7;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .total-row {
+      font-size: 1.18em;
+      color: #2176e7;
+      font-weight: 900;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(90deg, #2176e7 0%, #3a8dde 100%);
+      color: #fff;
+      font-size: 1.25em;
+      font-weight: 900;
+      border: none;
+      border-radius: 24px;
+      padding: 20px;
+      cursor: pointer;
+      margin-top: 12px;
+      box-shadow: 0 2px 8px #2176e722;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .submit-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 18px #2176e733;
+    }
+    .check-icon {
+      width: 28px;
+      height: 28px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 4px;
+    }
+    .check-icon svg {
+      display: block;
+      margin: auto;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+      color: #e0e7ef;
+      font-size: 1.08em;
+    }
+    @media (max-width: 700px) {
+      .main-card { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+      .logo-box { left: 8px; top: -40px; }
+      .main-title { font-size: 1.5em; margin-top: 60px; }
+      .milk-img { width: 80px; height: 80px; }
+      .submit-btn { font-size: 1em; padding: 12px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
+  <div class="main-card">
+    <div class="logo-box">
       <img src="/logo.png" class="logo-img"/>
-      <div class="brand">Create Milk Plan</div>
     </div>
-    <div class="card center">
-        <img src="/milk_bottle.jpg"
-             style="width:90px;height:90px;object-fit:contain;margin-bottom:10px;"/>
-      <h3 style="color:#233a7d;margin-bottom:18px;">Liters per day</h3>
-      <form method="post" action="/plans" id="planForm">
-        <div class="qty">
-          <button type="button" onclick="decr()">-</button>
-          <input id="liters" name="liters" value="1" class="input" style="width:80px;text-align:center;"/>
-          <button type="button" onclick="incr()">+</button>
-        </div>
-          <label>Days</label>
-          <input class="input" type="number" name="days" placeholder="Enter days" required min="1" max="365"/>
-
-          <div style="margin:18px 0 8px 0; color:#3466d3; font-weight:500;">
-            Delivery will start <span th:text="${suggestedStartDate}"></span>.
-            <br/>
-            <span style="font-size:0.98em; color:#888;">If you place your order before 9 PM, delivery starts tomorrow. After 9 PM, delivery starts the day after tomorrow.</span>
-          </div>
-          <div style="margin-bottom:8px; color:#3466d3; font-weight:500;">
-            Milk price: ₹<span id="pricePerLiter" th:text="${pricePerLiter}"></span> per liter
-          </div>
-          <div style="margin-bottom:8px; color:#233a7d; font-weight:500;">
-            Total amount: ₹<span id="totalAmount">0</span>
-          </div>
-
-          <button class="button" type="submit">Create Plan & Pay</button>
-      </form>
-    </div>
-    <div style="margin-top:12px;" class="center"><a href="/home">Back</a></div>
+    <div class="main-title">Create Milk Plan</div>
+    <div class="subtitle">Customize your subscription in seconds</div>
+    <img src="/milk_bottle.jpg" class="milk-img"/>
+    <form method="post" action="/plans" id="planForm">
+      <div class="form-label">Liters per day</div>
+      <div class="qty-row">
+        <button type="button" class="qty-btn" onclick="decr()">-</button>
+        <input id="liters" name="liters" value="1" class="qty-value" readonly />
+        <button type="button" class="qty-btn" onclick="incr()">+</button>
+      </div>
+      <div class="days-label">Days</div>
+      <input class="days-input" type="number" name="days" placeholder="Enter days" required min="1" max="365"/>
+      <div class="info-section">
+        Delivery will start <span id="startDate" th:text="${suggestedStartDate}"></span>,
+      </div>
+      <div class="info-desc">
+        If you place your order before 9 PM, deliver starts tomorrow. After 9 PM, delivery starts the day after tomorrow.
+      </div>
+      <div class="price-row">
+        Milk price: <span style="font-weight:900;">₹<span id="pricePerLiter" th:text="${pricePerLiter}"></span></span> per liter
+      </div>
+      <div class="total-row">
+        Total amount: <span style="font-weight:900;">₹<span id="totalAmount">0.00</span></span>
+      </div>
+      <button type="submit" class="submit-btn">
+        <span class="check-icon">
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="#fff" opacity="0.9"/><path d="M5 9l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        Create Plan
+      </button>
+    </form>
     <div class="footer">© 2025 Shanthi Farms</div>
   </div>
-<script>
-function incr(){ var el = document.getElementById('liters'); el.value = (parseFloat(el.value)||0) + 0.5; updateTotal(); }
-function decr(){ var el = document.getElementById('liters'); el.value = Math.max(0.5, (parseFloat(el.value)||0) - 0.5); updateTotal(); }
-function updateTotal() {
-  var liters = parseFloat(document.getElementById('liters').value) || 0;
-  var days = parseInt(document.querySelector('input[name="days"]').value) || 0;
-  var price = parseFloat(document.getElementById('pricePerLiter').textContent) || 0;
-  var total = liters * days * price;
-  document.getElementById('totalAmount').textContent = total.toFixed(2);
-}
-document.getElementById('liters').addEventListener('input', updateTotal);
-document.querySelector('input[name="days"]').addEventListener('input', updateTotal);
-</script>
+  <script>
+    function incr() {
+      var input = document.getElementById('liters');
+      var val = parseInt(input.value) || 1;
+      input.value = val + 1;
+      updateTotal();
+    }
+    function decr() {
+      var input = document.getElementById('liters');
+      var val = parseInt(input.value) || 1;
+      if(val > 1) input.value = val - 1;
+      updateTotal();
+    }
+    function updateTotal() {
+      var liters = parseInt(document.getElementById('liters').value) || 1;
+      var days = parseInt(document.querySelector('input[name="days"]').value) || 1;
+      var price = parseFloat(document.getElementById('pricePerLiter').textContent) || 0;
+      document.getElementById('totalAmount').textContent = (liters * days * price).toFixed(2);
+    }
+    document.getElementById('liters').addEventListener('input', updateTotal);
+    document.querySelector('input[name="days"]').addEventListener('input', updateTotal);
+    window.onload = updateTotal;
+  </script>
 </body>
 </html>

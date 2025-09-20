@@ -3,90 +3,281 @@
 <head>
   <meta charset="utf-8"/>
   <title>Home - Shanthi Farms</title>
-  <link rel="stylesheet" href="/static/style.css"/>
+  <link rel="stylesheet" href="/style.css"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
-        body {
-            background: #f7fafc;
-            font-family: 'Times New Roman', Times, serif;
-        }
-        .container { max-width: 480px; margin: 48px auto; background: #fff; border-radius: 20px; box-shadow: 0 4px 24px #0002; padding: 48px 32px; }
-        .header { display: flex; align-items: center; margin-bottom: 32px; }
-        .logo-img { width: 56px; height: 56px; margin-right: 16px; object-fit: contain; }
-        .brand { font-size: 2em; font-weight: 700; color: #233a7d; }
-        .card { background: #f1f5fb; border-radius: 16px; padding: 28px 20px; box-shadow: 0 2px 12px #0001; margin-bottom: 24px; }
-        .center { text-align: center; }
-        .button { border: none; border-radius: 8px; padding: 12px 22px; font-size: 1.1em; cursor: pointer; background: #3466d3; color: #fff; transition: background 0.2s, box-shadow 0.2s; margin-top: 8px; margin-bottom: 8px; font-family: 'Times New Roman', Times, serif; }
-        .button:hover { background: #233a7d; box-shadow: 0 2px 8px #3466d355; }
-        h2, h3 { font-size: 1.5em; margin-bottom: 18px; }
-        h4 { font-size: 1.2em; margin-bottom: 12px; }
-        a { color: #3466d3; text-decoration: underline; transition: color 0.2s; font-family: 'Times New Roman', Times, serif; }
-        a:hover { color: #233a7d; text-decoration: underline; }
-        .kpi {
-            display: flex;
-            gap: 32px;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-        .kpi .item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #f1f5fb;
-            border-radius: 12px;
-            box-shadow: 0 1px 6px #0001;
-            padding: 18px 16px;
-            min-width: 140px;
-        }
-        .kpi .item div {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #233a7d;
-            margin-bottom: 10px;
-        }
-        @media (max-width: 600px) {
-            .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
-            .header { flex-direction: column; align-items: flex-start; }
-            .logo-img { margin-bottom: 8px; margin-right: 0; }
-            .card { padding: 12px 6px; }
-            .kpi { flex-direction: column; gap: 16px; }
-            .kpi .item { min-width: 0; width: 100%; }
-        }
-    </style>
+    body {
+      background: linear-gradient(120deg, #7f9cf5 0%, #6ee7b7 100%) fixed;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 48px auto;
+      background: rgba(255,255,255,0.08);
+      border-radius: 32px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.13);
+      padding: 48px 32px 32px 32px;
+      backdrop-filter: blur(12px);
+      text-align: left;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .logo-img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .brand {
+      font-size: 2.8em;
+      font-weight: 800;
+      color: #2563eb;
+      margin-bottom: 2px;
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+    .tagline {
+      color: #e0e7ef;
+      font-size: 1.25em;
+      font-weight: 500;
+      margin-bottom: 0;
+      margin-left: 2px;
+    }
+    .nav-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: flex-end;
+    }
+    .nav-link, .logout-btn {
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 24px;
+      padding: 10px 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 1.08em;
+      box-shadow: 0 2px 8px rgba(52,211,153,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-link {
+      background: linear-gradient(90deg, #34d399 0%, #22c55e 100%);
+      color: #fff;
+    }
+    .logout-btn {
+      background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+      color: #fff;
+    }
+    .nav-link:hover, .logout-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 18px rgba(16,185,129,0.18);
+      text-decoration: underline;
+    }
+    .main-actions {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      margin-bottom: 32px;
+      margin-top: 18px;
+    }
+    .action-card {
+      background: rgba(120,180,255,0.18);
+      border-radius: 18px;
+      box-shadow: 0 2px 12px #0001;
+      padding: 28px 20px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .action-card > div {
+      font-size: 1.18em;
+      font-weight: 600;
+      color: #1a2343;
+      margin-bottom: 8px;
+    }
+    .action-btn {
+      background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 32px;
+      font-size: 1.15em;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #2563eb22;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .action-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 18px #2563eb33;
+    }
+    .welcome {
+      color: #1a2343;
+      font-size: 1.25em;
+      font-weight: 600;
+      margin-bottom: 28px;
+      margin-top: 18px;
+      text-align: center;
+    }
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .feature-row {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .feature {
+      background: rgba(180,220,255,0.38);
+      border-radius: 18px;
+      color: #2563eb;
+      font-weight: 700;
+      padding: 10px 28px;
+      font-size: 1.08em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 1px 6px #0001;
+    }
+    .feature.trusted {
+      background: rgba(180,220,255,0.38);
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .whatsapp-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .whatsapp {
+      background: linear-gradient(90deg, #22c55e 0%, #34d399 100%);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 24px;
+      padding: 12px 28px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.08em;
+      box-shadow: 0 2px 8px #34d39944;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .whatsapp:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 18px #34d39988;
+      text-decoration: underline;
+    }
+    .footer {
+      text-align: center;
+      color: #e0e7ef;
+      margin-top: 32px;
+      font-size: 1.08em;
+    }
+    @media (max-width: 700px) {
+      .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
+      .header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .main-actions { flex-direction: column; gap: 16px; }
+      .action-card { width: 100%; min-width: 0; }
+      .features { flex-direction: column; gap: 10px; }
+      .feature-row { flex-direction: column; gap: 10px; }
+      .whatsapp-row { flex-direction: column; gap: 8px; }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <img src="/logo.png" class="logo-img"/>
-      <div style="flex:1">
-        <div class="brand">Shanthi Farms</div>
-        <div class="small">Delivering fresh milk everyday</div>
+      <div class="header-left">
+        <img src="/logo.png" class="logo-img"/>
+        <div>
+          <div class="brand">Shanthi Farms</div>
+          <div class="tagline">Delivering fresh milk everyday</div>
+        </div>
       </div>
-      <div style="margin-left:auto;">
-        <a href="/account" class="nav-link">Account</a>
+      <div class="nav-actions">
+        <a href="/account" class="nav-link" aria-label="Account">
+          <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" rx="10" fill="#22c55e"/><path d="M10 11.5c1.38 0 2.5-1.12 2.5-2.5S11.38 6.5 10 6.5 7.5 7.62 7.5 9s1.12 2.5 2.5 2.5zm0 1.5c-2.33 0-7 1.17-7 3.5V18h14v-1.5c0-2.33-4.67-3.5-7-3.5z" fill="#fff"/></svg>
+          Account
+        </a>
+        <a href="/logout" class="logout-btn" aria-label="Logout">
+          <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" rx="10" fill="#2563eb"/><path d="M13 10l-4 4m0-8l4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Logout
+        </a>
       </div>
-      <div><a class="button ghost" href="/logout">Logout</a></div>
     </div>
-    <div class="kpi">
-      <div class="item">
+    <div class="main-actions">
+      <div class="action-card">
         <div>Place Order</div>
-        <a class="button" href="/plans/new">Create Plan</a>
+        <a href="/plans/new" class="action-btn" aria-label="Create Plan">
+          <svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="16" height="10" rx="3" stroke="#fff" stroke-width="2"/><path d="M7 11h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="17" r="1.5" fill="#fff"/><circle cx="14" cy="17" r="1.5" fill="#fff"/></svg>
+          Create Plan
+        </a>
       </div>
-      <div class="item">
+      <div class="action-card">
         <div>My Orders</div>
-        <a class="button" href="/orders">View Orders</a>
+        <a href="/orders" class="action-btn" aria-label="View Orders">
+          <svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="16" height="10" rx="3" stroke="#fff" stroke-width="2"/><path d="M7 11h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><rect x="7" y="13" width="8" height="2" rx="1" fill="#fff"/></svg>
+          View Orders
+        </a>
       </div>
     </div>
-    <div class="welcome center" style="font-size:1.15em; color:#065f46; margin-bottom:10px; font-weight:500;">Welcome back! We're happy to deliver fresh milk to your doorstep.</div>
-    <div class="benefits center" style="margin-bottom:18px; color:#3466d3; font-size:1em;">
-      <span style="margin-right:12px;">✔ 100% Pure & Fresh</span>
-      <span style="margin-right:12px;">✔ On-time Delivery</span>
-      <span>✔ Trusted by 1000+ families</span>
+    <div class="welcome">Welcome back! We're happy to deliver fresh milk to your doorstep.</div>
+    <div class="features">
+      <div class="feature-row">
+        <span class="feature">
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="#2563eb" opacity="0.18"/><path d="M5 9l2 2 4-4" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>
+          100% Pure & Fresh
+        </span>
+        <span class="feature">
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="#2563eb" opacity="0.18"/><path d="M5 9l2 2 4-4" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>
+          On-time Delivery
+        </span>
+      </div>
+      <div class="feature-row">
+        <span class="feature trusted">
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="#2563eb" opacity="0.18"/><path d="M5 9l2 2 4-4" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>
+          Trusted by 1000+ families
+        </span>
+      </div>
     </div>
-    <div style="margin-top:12px;" class="small center">
-      Need help? <a class="button" style="background:#25D366; color:#fff; padding:7px 16px; font-size:1em;" href="https://wa.me/918985849645" target="_blank">WhatsApp us at +91-8985849645</a>
+    <div class="whatsapp-row">
+      <span style="color:#1a2343;font-weight:600;font-size:1.08em;">Need help?</span>
+      <a href="https://wa.me/919985849645" target="_blank" class="whatsapp" aria-label="WhatsApp Support">
+        <svg width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="22" rx="11" fill="#25D366"/><path d="M7 16l2-2c.2-.2.5-.2.7 0l.8.8c.2.2.5.2.7 0l3.3-3.3c.2-.2.2-.5 0-.7l-.8-.8c-.2-.2-.2-.5 0-.7l2-2" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+        WhatsApp us at +91-995849645
+      </a>
     </div>
-    <div class="footer center">© 2025 Shanthi Farms</div>
+    <div class="footer">© 2025 Shanthi Farms</div>
   </div>
 </body>
 </html>

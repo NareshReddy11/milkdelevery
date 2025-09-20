@@ -155,6 +155,7 @@ public class CustomerController {
     }
 
     @PostMapping("/orders/{id}/paid")
+    @ResponseBody
     public String markOrderPaid(@PathVariable Long id) {
         OrderEntity order = orderRepo.findById(id).orElseThrow();
         order.setPaymentStatus("PAID");
@@ -172,7 +173,7 @@ public class CustomerController {
             }
         }
         whatsAppService.sendMessage("+91-00000", "Payment received for your order!");
-        return "redirect:/orders";
+        return "OK";
     }
 
 
@@ -184,6 +185,8 @@ public class CustomerController {
         }
         // Fetch orders for the logged-in customer
         List<OrderEntity> orders = orderRepo.findByCustomerId(cid);
+        // Sort orders by createdAt descending (latest first)
+        orders.sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
         model.addAttribute("orders", orders);
         // Fetch customer for address check
         com.shanthifarms.model.Customer customer = customerRepo.findById(cid).orElse(null);
