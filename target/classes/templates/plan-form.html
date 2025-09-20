@@ -46,20 +46,39 @@
           <input id="liters" name="liters" value="1" class="input" style="width:80px;text-align:center;"/>
           <button type="button" onclick="incr()">+</button>
         </div>
-        <label>Start Date</label>
-        <input class="input" type="date" name="startDate" required/>
-        <label>Days</label>
-        <input class="input" type="number" name="days" value="30" required min="1" max="365"/>
-        </select>
-        <button class="button" type="submit">Create Plan & Pay</button>
+          <label>Days</label>
+          <input class="input" type="number" name="days" placeholder="Enter days" required min="1" max="365"/>
+
+          <div style="margin:18px 0 8px 0; color:#3466d3; font-weight:500;">
+            Delivery will start <span th:text="${suggestedStartDate}"></span>.
+            <br/>
+            <span style="font-size:0.98em; color:#888;">If you place your order before 9 PM, delivery starts tomorrow. After 9 PM, delivery starts the day after tomorrow.</span>
+          </div>
+          <div style="margin-bottom:8px; color:#3466d3; font-weight:500;">
+            Milk price: ₹<span id="pricePerLiter" th:text="${pricePerLiter}"></span> per liter
+          </div>
+          <div style="margin-bottom:8px; color:#233a7d; font-weight:500;">
+            Total amount: ₹<span id="totalAmount">0</span>
+          </div>
+
+          <button class="button" type="submit">Create Plan & Pay</button>
       </form>
     </div>
     <div style="margin-top:12px;" class="center"><a href="/home">Back</a></div>
     <div class="footer">© 2025 Shanthi Farms</div>
   </div>
 <script>
-function incr(){ var el = document.getElementById('liters'); el.value = (parseFloat(el.value)||0) + 0.5; }
-function decr(){ var el = document.getElementById('liters'); el.value = Math.max(0.5, (parseFloat(el.value)||0) - 0.5); }
+function incr(){ var el = document.getElementById('liters'); el.value = (parseFloat(el.value)||0) + 0.5; updateTotal(); }
+function decr(){ var el = document.getElementById('liters'); el.value = Math.max(0.5, (parseFloat(el.value)||0) - 0.5); updateTotal(); }
+function updateTotal() {
+  var liters = parseFloat(document.getElementById('liters').value) || 0;
+  var days = parseInt(document.querySelector('input[name="days"]').value) || 0;
+  var price = parseFloat(document.getElementById('pricePerLiter').textContent) || 0;
+  var total = liters * days * price;
+  document.getElementById('totalAmount').textContent = total.toFixed(2);
+}
+document.getElementById('liters').addEventListener('input', updateTotal);
+document.querySelector('input[name="days"]').addEventListener('input', updateTotal);
 </script>
 </body>
 </html>
