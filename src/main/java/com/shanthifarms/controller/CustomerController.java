@@ -5,15 +5,20 @@ import com.shanthifarms.repository.DeliveryRecordRepository;
 import com.shanthifarms.repository.MilkPlanRepository;
 import com.shanthifarms.repository.OrderRepository;
 import com.shanthifarms.service.PlanService;
-import com.shanthifarms.service.DeliveryService;
 import com.shanthifarms.service.WhatsAppService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import com.shanthifarms.repository.AddressRepository;
+import com.shanthifarms.repository.CustomerRepository;
+import java.nio.file.*;
+import java.io.IOException;
 
 @Controller
 public class CustomerController {
@@ -21,22 +26,28 @@ public class CustomerController {
     private final PlanService planService;
     private final MilkPlanRepository planRepo;
     private final DeliveryRecordRepository recordRepo;
-    private final DeliveryService deliveryService;
     private final WhatsAppService whatsAppService;
     private final OrderRepository orderRepo;
+    private final AddressRepository addressRepo;
+    private final CustomerRepository customerRepo;
+
+    @Value("${milk.pricePerLiter}")
+    private double pricePerLiter;
 
     public CustomerController(PlanService planService,
                               MilkPlanRepository planRepo,
                               DeliveryRecordRepository recordRepo,
-                              DeliveryService deliveryService,
                               WhatsAppService whatsAppService,
-                              OrderRepository orderRepo) {
+                              OrderRepository orderRepo,
+                              AddressRepository addressRepo,
+                              CustomerRepository customerRepo) {
         this.planService = planService;
         this.planRepo = planRepo;
         this.recordRepo = recordRepo;
-        this.deliveryService = deliveryService;
         this.whatsAppService = whatsAppService;
         this.orderRepo = orderRepo;
+        this.addressRepo = addressRepo;
+        this.customerRepo = customerRepo;
     }
 
     @GetMapping("/home")
@@ -49,123 +60,264 @@ public class CustomerController {
     }
 
     @GetMapping("/plans/new")
-    public String newPlanForm(HttpSession session){
+    public String newPlanForm(HttpSession session, Model model){
         Long cid = (Long) session.getAttribute("customerId");
         if(cid==null) return "redirect:/login";
+        java.time.LocalTime now = java.time.LocalTime.now();
+        java.time.LocalDate startDate;
+        if (now.isBefore(java.time.LocalTime.of(21, 0))) {
+            startDate = java.time.LocalDate.now().plusDays(1);
+        } else {
+            startDate = java.time.LocalDate.now().plusDays(2);
+        }
+        model.addAttribute("suggestedStartDate", startDate);
+        model.addAttribute("pricePerLiter", pricePerLiter);
+        // Default values for preview
+        model.addAttribute("previewTotal", 0);
         return "plan-form";
     }
 
     @PostMapping("/plans")
     public String createPlan(HttpSession session,
-                             @RequestParam String startDate,
                              @RequestParam int days,
                              @RequestParam double liters,
                              Model model) {
         Long cid = (Long) session.getAttribute("customerId");
         if (cid == null) return "redirect:/login";
-
-        MilkPlan saved = planService.createPlan(
+        java.time.LocalTime now = java.time.LocalTime.now();
+        java.time.LocalDate startDate;
+        if (now.isBefore(java.time.LocalTime.of(21, 0))) {
+            startDate = java.time.LocalDate.now().plusDays(1);
+        } else {
+            startDate = java.time.LocalDate.now().plusDays(2);
+        }
+        double totalAmount = days * liters * pricePerLiter;
+        model.addAttribute("suggestedStartDate", startDate);
+        model.addAttribute("pricePerLiter", pricePerLiter);
+        model.addAttribute("totalAmount", totalAmount);
+        MilkPlan savedPlan = planService.createPlan(
                 cid,
-                LocalDate.parse(startDate),
+                startDate,
                 days,
                 liters
         );
-
+        LocalDate deliveryDate = savedPlan.getStartDate();
+        OrderEntity existingOrder = orderRepo.findByPlan_IdAndDeliveryDate(savedPlan.getId(), deliveryDate);
+        if (existingOrder == null) {
+            OrderEntity order = new OrderEntity();
+            order.setCustomer(savedPlan.getCustomer());
+            order.setLiters(savedPlan.getLitersPerDay());
+            order.setDeliveryDate(deliveryDate);
+            order.setOrderDate(LocalDate.now());
+            order.setStatus("CONFIRMED");
+            order.setPaymentStatus("PENDING");
+            order.setPlan(savedPlan);
+            orderRepo.save(order);
+        }
         whatsAppService.sendMessage("+91-00000", "Your plan is created");
         model.addAttribute("message", "Plan created");
-
-        // Redirect to payment page for the newly created plan
-        return "redirect:/plans/" + saved.getId() + "/pay";
+        return "redirect:/plans/" + savedPlan.getId() + "/pay";
     }
-
 
     @GetMapping("/plans/{id}/pay")
-    public String payPlan(@PathVariable Long id, Model model) {
-        // find plan
+    public String payPlan(@PathVariable Long id, Model model, HttpSession session) {
         MilkPlan plan = planRepo.findById(id).orElseThrow(() -> new RuntimeException("Plan not found"));
-
-        // Create a demo ordre for this plan (if you want persistent orders)
-        OrderEntity order = new OrderEntity();
-        order.setCustomer(plan.getCustomer());
-        order.setLiters(plan.getLitersPerDay());
-        order.setDeliveryDate(plan.getStartDate()); // keep this for first delivery
-        order.setOrderDate(plan.getStartDate());    // ✅ use plan’s start date, not LocalDate.now()
-        order.setStatus("CONFIRMED");
-        order.setPaymentStatus("PENDING");
-        orderRepo.save(order);
-
+        LocalDate deliveryDate = plan.getStartDate();
+        OrderEntity order = orderRepo.findByPlan_IdAndDeliveryDate(plan.getId(), deliveryDate);
+        if (order == null) {
+            order = new OrderEntity();
+            order.setCustomer(plan.getCustomer());
+            order.setLiters(plan.getLitersPerDay());
+            order.setDeliveryDate(deliveryDate);
+            order.setOrderDate(deliveryDate);
+            order.setStatus("CONFIRMED");
+            order.setPaymentStatus("PENDING");
+            order.setPlan(plan);
+            // Set address to default address if available
+            Long cid = (Long) session.getAttribute("customerId");
+            Address defaultAddress = addressRepo.findByCustomerIdAndIsDefaultTrue(cid);
+            if (defaultAddress != null) {
+                order.setAddress(defaultAddress);
+            }
+            orderRepo.save(order);
+        }
+        // If no address, redirect to address selection page
+        if (order.getAddress() == null) {
+            return "redirect:/select-address?orderId=" + order.getId();
+        }
+        double totalAmount = plan.getDays() * plan.getLitersPerDay() * pricePerLiter;
         model.addAttribute("plan", plan);
-        model.addAttribute("orderId", order.getId()); // pass to template
-        return "payment";  // matches payment.html
+        model.addAttribute("orderId", order.getId());
+        model.addAttribute("pricePerLiter", pricePerLiter);
+        model.addAttribute("totalAmount", totalAmount);
+        model.addAttribute("address", order.getAddress());
+        return "payment";
     }
 
-    @PatchMapping("/orders/{id}/paid")
-    @ResponseBody
+    @PostMapping("/orders/{id}/paid")
     public String markOrderPaid(@PathVariable Long id) {
-        // fetch order
-        OrderEntity order = orderRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        // mark paid
+        OrderEntity order = orderRepo.findById(id).orElseThrow();
         order.setPaymentStatus("PAID");
-        order.setStatus("CONFIRMED");
         orderRepo.save(order);
-
-        // try to find a milk plan for this customer (first active one)
-        Long customerId = order.getCustomer() != null ? order.getCustomer().getId() : null;
-        MilkPlan plan = null;
-        if (customerId != null) {
-            List<MilkPlan> plans = planRepo.findByCustomerId(customerId);
-            if (plans != null && !plans.isEmpty()) {
-                plan = plans.stream().filter(p -> "ACTIVE".equals(p.getStatus()))
-                        .findFirst()
-                        .orElse(plans.get(0));
+        MilkPlan plan = order.getPlan();
+        // ✅ Prevent duplicate delivery records
+        if (recordRepo.countByMilkPlan_Id(plan.getId()) == 0) {
+            LocalDate start = plan.getStartDate();
+            for (int i = 0; i < plan.getDays(); i++) {
+                DeliveryRecord rec = new DeliveryRecord();
+                rec.setDeliveryDate(start.plusDays(i));
+                rec.setStatus("PENDING");
+                rec.setMilkPlan(plan);
+                recordRepo.save(rec);
             }
         }
-
-        // ✅ Create delivery record ONLY now (after payment)
-        if (plan != null) {
-            DeliveryRecord rec = new DeliveryRecord();
-            rec.setMilkPlan(plan);
-            rec.setDeliveryDate(order.getDeliveryDate());  // usually plan.getStartDate()
-            rec.setStatus("PENDING");
-            recordRepo.save(rec);
-        }
-
-        return "OK";
+        whatsAppService.sendMessage("+91-00000", "Payment received for your order!");
+        return "redirect:/orders";
     }
+
+
     @GetMapping("/orders")
     public String orders(HttpSession session, Model model) {
         Long cid = (Long) session.getAttribute("customerId");
         if (cid == null) {
             return "redirect:/login";
         }
-
-        List<DeliveryRecord> records = deliveryService.findByCustomer(cid);
-        model.addAttribute("records", records);
-
+        // Fetch orders for the logged-in customer
+        List<OrderEntity> orders = orderRepo.findByCustomerId(cid);
+        model.addAttribute("orders", orders);
+        // Fetch customer for address check
+        com.shanthifarms.model.Customer customer = customerRepo.findById(cid).orElse(null);
+        model.addAttribute("customer", customer);
+        // Fetch addresses for the logged-in customer
+        java.util.List<Address> addresses = addressRepo.findByCustomerId(cid);
+        model.addAttribute("addresses", addresses);
         return "orders";
     }
 
     @GetMapping("/account")
     public String account(HttpSession session, Model model) {
         Long cid = (Long) session.getAttribute("customerId");
-        if (cid == null) return "redirect:/Login";
-
-        // fetch the Customer entity (not Long!)
-        Customer customer = planRepo.findByCustomerId(cid)
-                .stream()
-                .findFirst()
-                .map(MilkPlan::getCustomer)
-                .orElse(null);
-
-        MilkPlan plan = planRepo.findByCustomerId(cid)
-                .stream()
-                .findFirst()
-                .orElse(null);
-
+        if (cid == null) return "redirect:/login";
+        Customer customer = customerRepo.findById(cid).orElse(null);
+        List<Address> addresses = addressRepo.findByCustomerId(cid);
+        List<MilkPlan> plans = planRepo.findByCustomerId(cid);
         model.addAttribute("customer", customer);
-        model.addAttribute("plan", plan);
+        model.addAttribute("addresses", addresses);
+        model.addAttribute("plans", plans);
         return "account";
+    }
+
+    @GetMapping("/select-address")
+    public String selectAddress(@RequestParam Long orderId, HttpSession session, Model model) {
+        Long cid = (Long) session.getAttribute("customerId");
+        if (cid == null) return "redirect:/login";
+        OrderEntity order = orderRepo.findById(orderId).orElse(null);
+        if (order == null) return "redirect:/orders";
+        List<Address> addresses = addressRepo.findByCustomerId(cid);
+        model.addAttribute("addresses", addresses);
+        model.addAttribute("orderId", orderId);
+        return "select-address";
+    }
+
+    @PostMapping("/select-address")
+    public String setOrderAddress(@RequestParam Long orderId, @RequestParam Long addressId) {
+        OrderEntity order = orderRepo.findById(orderId).orElse(null);
+        Address address = addressRepo.findById(addressId).orElse(null);
+        if (order != null && address != null) {
+            order.setAddress(address);
+            orderRepo.save(order);
+            return "redirect:/plans/" + order.getPlan().getId() + "/pay";
+        }
+        return "redirect:/orders";
+    }
+
+    @GetMapping("/add-address")
+    public String showAddAddressForm(@RequestParam(required = false) Long orderId, HttpSession session, Model model) {
+        Long cid = (Long) session.getAttribute("customerId");
+        if (cid == null) return "redirect:/login";
+        model.addAttribute("orderId", orderId);
+        return "add-address";
+    }
+
+    @PostMapping("/add-address")
+    public String addAddress(@RequestParam String label,
+                            @RequestParam String address,
+                            @RequestParam(required = false) Long orderId,
+                            HttpSession session) {
+        Long cid = (Long) session.getAttribute("customerId");
+        if (cid == null) return "redirect:/login";
+        Customer customer = customerRepo.findById(cid).orElse(null);
+        if (customer == null) return "redirect:/login";
+        Address addr = new Address();
+        addr.setLabel(label);
+        addr.setAddress(address);
+        addr.setCustomer(customer);
+        addressRepo.save(addr);
+        if (orderId != null) {
+            return "redirect:/select-address?orderId=" + orderId;
+        } else {
+            return "redirect:/account";
+        }
+    }
+
+    @PostMapping("/customer/address/default")
+    @ResponseBody
+    public String setDefaultAddress(HttpSession session, @RequestParam Long addressId) {
+        Long cid = (Long) session.getAttribute("customerId");
+        System.out.println("setDefaultAddress called: addressId=" + addressId + ", customerId=" + cid);
+        if (cid == null) return "ERROR: Not logged in";
+        Address addr = addressRepo.findById(addressId).orElse(null);
+        System.out.println("Address found: " + (addr != null ? addr.getId() : null));
+        if (addr == null || !addr.getCustomer().getId().equals(cid)) {
+            System.out.println("Address not found or does not belong to customer");
+            return "ERROR: Address not found";
+        }
+        // Unset previous default
+        List<Address> addresses = addressRepo.findByCustomerId(cid);
+        for (Address a : addresses) {
+            if (a.isDefault()) {
+                a.setDefault(false);
+                addressRepo.save(a);
+            }
+        }
+        // Set new default
+        addr.setDefault(true);
+        addressRepo.save(addr);
+        System.out.println("Default address set: " + addr.getId());
+        return "OK";
+    }
+
+    @DeleteMapping("/customer/address/{id}")
+    @ResponseBody
+    public String deleteAddress(HttpSession session, @PathVariable Long id) {
+        Long cid = (Long) session.getAttribute("customerId");
+        System.out.println("deleteAddress called: id=" + id + ", customerId=" + cid);
+        if (cid == null) return "ERROR: Not logged in";
+        Address addr = addressRepo.findById(id).orElse(null);
+        System.out.println("Address found: " + (addr != null ? addr.getId() : null));
+        if (addr == null || !addr.getCustomer().getId().equals(cid)) {
+            System.out.println("Address not found or does not belong to customer");
+            return "ERROR: Address not found";
+        }
+        addressRepo.delete(addr);
+        System.out.println("Address deleted: " + id);
+        return "OK";
+    }
+
+    @PostMapping("/account/photo")
+    public String uploadPhoto(@RequestParam("photo") MultipartFile file, HttpSession session) throws IOException {
+        Long cid = (Long) session.getAttribute("customerId");
+        if (cid == null) return "redirect:/login";
+        Customer customer = customerRepo.findById(cid).orElse(null);
+        if (customer == null) return "redirect:/login";
+        if (!file.isEmpty()) {
+            String filename = "user-" + cid + "-" + file.getOriginalFilename();
+            Path path = Paths.get("src/main/resources/static/user-photos/" + filename);
+            Files.createDirectories(path.getParent());
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            customer.setPhotoPath("/user-photos/" + filename);
+            customerRepo.save(customer);
+        }
+        return "redirect:/account";
     }
 }

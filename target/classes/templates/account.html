@@ -1,56 +1,90 @@
-<!doctype html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"/>
   <title>Account - Shanthi Farms</title>
   <link rel="stylesheet" href="/static/style.css"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
-    body { background: #f7fafc; }
-    .container { max-width: 420px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #0002; padding: 32px 24px; }
-    .header { display: flex; align-items: center; margin-bottom: 18px; }
-    .brand { font-size: 1.3em; font-weight: 700; color: #233a7d; }
-    h3 { color: #233a7d; margin-bottom: 18px; text-align: center; }
-    h4 { color: #3466d3; margin-top: 18px; }
-    .info { background: #f1f5fb; border-radius: 12px; padding: 18px 14px; margin-bottom: 18px; box-shadow: 0 1px 6px #0001; }
-    .info div { margin-bottom: 8px; font-size: 1.08em; }
-    ul { padding-left: 18px; margin: 0; }
-    li { margin-bottom: 8px; font-size: 1em; }
-    .badge { padding: 2px 10px; border-radius: 8px; font-size: 0.95em; font-weight: 600; }
-    .ACTIVE { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .INACTIVE { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-    .footer { text-align: center; margin-top: 32px; color: #aaa; font-size: 0.95em; }
-    a { color: #3466d3; text-decoration: underline; }
-    .actions { margin-top: 12px; text-align: center; }
-    @media (max-width: 600px) {
+    body { background: #f7fafc; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
+    .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px #0002; padding: 32px 24px; }
+    h3 { color: #233a7d; margin-bottom: 24px; text-align: center; font-size: 2em; font-weight: 700; }
+    .section-title { color: #3466d3; font-size: 1.25em; font-weight: 700; margin: 32px 0 16px 0; }
+    .card { background: #f1f5fb; border-radius: 12px; box-shadow: 0 1px 6px #0001; padding: 20px 18px; margin-bottom: 18px; }
+    .user-info { margin-bottom: 18px; }
+    .user-info div { font-size: 1.1em; margin-bottom: 6px; }
+    .address-list { margin: 0; padding: 0; list-style: none; }
+    .address-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px #0001; padding: 16px 18px; margin-bottom: 14px; display: flex; flex-direction: column; }
+    .address-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .address-label { font-weight: 700; font-size: 1.1em; color: #233a7d; }
+    .address-default { color: #25D366; font-weight: 700; font-size: 0.98em; margin-left: 8px; }
+    .address-actions { display: flex; gap: 10px; margin-top: 10px; }
+    .btn { background: #3466d3; color: #fff; border: none; border-radius: 6px; padding: 7px 16px; font-size: 1em; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+    .btn:hover { background: #233a7d; }
+    .add-btn { background: #e6f0ff; color: #3466d3; border: none; border-radius: 8px; padding: 7px 16px; font-size: 1em; font-weight: 600; margin-top: 8px; cursor: pointer; transition: background 0.2s; }
+    .add-btn:hover { background: #d0e2ff; color: #233a7d; }
+    .plans-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .plans-table th, .plans-table td { padding: 10px 8px; border-bottom: 1px solid #e0e7ef; text-align: left; }
+    .plans-table th { background: #f1f5fb; color: #233a7d; font-weight: 600; }
+    .plan-status { padding: 4px 10px; border-radius: 8px; font-size: 0.98em; font-weight: 600; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .actions { margin-top: 24px; text-align: center; }
+    .nav-link { color: #3466d3; font-weight: 600; text-decoration: none; margin-left: 18px; border-radius: 8px; padding: 7px 16px; background: #e6f0ff; transition: background 0.2s; }
+    .nav-link:hover { color: #233a7d; background: #d0e2ff; text-decoration: underline; }
+    .footer { text-align: center; color: #888; margin-top: 32px; font-size: 0.98em; }
+    @media (max-width: 700px) {
       .container { max-width: 100vw; margin: 0; border-radius: 0; box-shadow: none; padding: 16px 6px; }
-      .header { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header"><div class="brand">Shanthi Farms</div></div>
     <h3>My Account</h3>
-    <div class="info">
+    <div class="card user-info">
       <div>Name: <span th:text="${customer.name}"></span></div>
       <div>Phone: <span th:text="${customer.phone}"></span></div>
-      <div>Address: <span th:text="${customer.address}"></span></div>
+      <div>User ID: <span th:text="${customer.id}"></span></div>
     </div>
-    <h4>My Plans:</h4>
-    <div class="info">
-      <div th:if="${plans != null and #lists.size(plans) > 0}">
-        <ul>
-          <li th:each="p : ${plans}">
-            <span th:text="${p.litersPerDay}"></span> Liters/day for <span th:text="${p.days}"></span> days (from <span th:text="${p.startDate}"></span>)
-            <span th:if="${p.status != null}" th:class="badge" th:classappend=" ${p.status}">[<span th:text="${p.status}"></span>]</span>
-          </li>
-        </ul>
-      </div>
-      <div th:if="${plans == null or #lists.size(plans) == 0}">No plans found.</div>
+    <div class="section-title">My Addresses:</div>
+    <div class="card">
+      <ul class="address-list">
+        <li th:each="addr : ${addresses}" class="address-card">
+          <div class="address-header">
+            <span class="address-label" th:text="${addr.label}"></span>
+            <span th:if="${addr.isDefault}" class="address-default">Default</span>
+          </div>
+          <div th:text="${addr.address}" style="color:#444; margin-bottom: 4px;"></div>
+          <div class="address-actions">
+            <button type="button" th:if="!${addr.isDefault}" th:attr="onclick='setDefaultAddress(' + ${addr.id} + ')'" class="btn">Set as Default</button>
+            <button type="button" th:attr="onclick='deleteAddress(' + ${addr.id} + ')'" class="btn" style="background:#e53e3e;">Delete</button>
+          </div>
+        </li>
+      </ul>
+      <div th:if="${addresses == null or #lists.size(addresses) == 0}" style="text-align:center; color:#888;">No addresses found.</div>
+      <div class="actions"><a th:href="@{/add-address}" class="add-btn">+ Add Address</a></div>
     </div>
-    <div class="actions"><a href="/home">Back</a> | <a href="/logout">Logout</a></div>
+    <div class="actions"><a href="/home" class="nav-link">Back</a> <a href="/logout" class="nav-link">Logout</a></div>
     <div class="footer">© 2025 Shanthi Farms</div>
   </div>
+  <script>
+    function setDefaultAddress(id) {
+        fetch('/customer/address/default', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'addressId=' + id
+        }).then(res => res.text()).then(resp => {
+            if (resp === 'OK') location.reload();
+            else alert('Error setting default address.');
+        });
+    }
+    function deleteAddress(id) {
+        if (!confirm('Delete this address?')) return;
+        fetch('/customer/address/' + id, {
+            method: 'DELETE'
+        }).then(res => res.text()).then(resp => {
+            if (resp === 'OK') location.reload();
+            else alert('Error deleting address.');
+        });
+    }
+  </script>
 </body>
 </html>

@@ -27,25 +27,44 @@ public class AuthController {
 
     @PostMapping("/auth/send-otp")
     public String sendOtp(@RequestParam String phone,
+                          @RequestParam(required = false) String name,
+                          @RequestParam(required = false) String address,
                           RedirectAttributes redirectAttributes) {
         String otp = authService.generateOtp(phone);
-
         redirectAttributes.addAttribute("phone", phone); // adds ?phone=xxxx in URL
+        if (name != null) redirectAttributes.addAttribute("name", name);
+        if (address != null) redirectAttributes.addAttribute("address", address);
         redirectAttributes.addFlashAttribute("debugOtp", otp); // flash OTP for UI
-
         return "redirect:/login";
     }
 
     @PostMapping("/auth/verify-otp")
     public String verify(@RequestParam String phone,
                          @RequestParam String otp,
+                         @RequestParam(required = false) String name,
+                         @RequestParam(required = false) String address,
                          HttpSession session) {
         boolean ok = authService.verifyOtp(phone, otp);
         if (!ok) return "redirect:/login?error=otp";
 
-        // save customer if not exists
+        // save customer if not exists, or update name/address if missing
         Customer c = customerRepo.findByPhone(phone)
-                .orElseGet(() -> customerRepo.save(new Customer(phone)));
+                .orElseGet(() -> {
+                    Customer nc = new Customer(phone);
+                    nc.setName(name);
+                    nc.setAddress(address);
+                    return customerRepo.save(nc);
+                });
+        boolean updated = false;
+        if (c.getName() == null && name != null) {
+            c.setName(name);
+            updated = true;
+        }
+        if (c.getAddress() == null && address != null) {
+            c.setAddress(address);
+            updated = true;
+        }
+        if (updated) customerRepo.save(c);
 
         // store in session
         session.setAttribute("customerId", c.getId());

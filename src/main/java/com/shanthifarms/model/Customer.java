@@ -13,9 +13,13 @@ public class Customer {
     private Instant createdAt = Instant.now();
     private String address;
     private String otp;
+    private String photoPath;
 
     @Transient
     private java.util.List<com.shanthifarms.model.MilkPlan> plans;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Address> addresses = new java.util.ArrayList<>();
 
     public Customer(){}
     public Customer(String phone){ this.phone = phone; this.createdAt = Instant.now();}
@@ -32,6 +36,10 @@ public class Customer {
     public void setAddress(String address){this.address=address;}
     public String getOtp(){return otp;}
     public void setOtp(String otp){this.otp=otp;}
+    public String getPhotoPath() { return photoPath; }
+    public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
     public java.util.List<com.shanthifarms.model.MilkPlan> getPlans() { return plans; }
     public void setPlans(java.util.List<com.shanthifarms.model.MilkPlan> plans) { this.plans = plans; }
+    public java.util.List<Address> getAddresses() { return addresses; }
+    public void setAddresses(java.util.List<Address> addresses) { this.addresses = addresses; }
 }

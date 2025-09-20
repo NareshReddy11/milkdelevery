@@ -10,12 +10,22 @@ public class OrderEntity {
     private Long id;
     @ManyToOne
     private Customer customer;
+
+    // ✅ NEW: Link each order to the MilkPlan
+    @ManyToOne
+    @JoinColumn(name = "plan_id")   // this will create a foreign key in DB
+    private MilkPlan plan;
+
     private double liters;
     private LocalDate deliveryDate;
     private LocalDate orderDate;
     private String status = "CONFIRMED";
     private Instant createdAt = Instant.now();
     private String paymentStatus = "PENDING";
+
+    // NEW: Link each order to a delivery Address
+    @ManyToOne
+    private Address address;
 
     public OrderEntity(){}
     public Long getId(){return id;}
@@ -34,4 +44,8 @@ public class OrderEntity {
     public void setCreatedAt(Instant t){this.createdAt=t;}
     public String getPaymentStatus() { return paymentStatus; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
+    public MilkPlan getPlan() { return plan; }
+    public void setPlan(MilkPlan plan) { this.plan = plan; }
+    public Address getAddress() { return address; }
+    public void setAddress(Address address) { this.address = address; }
 }

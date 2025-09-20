@@ -10,13 +10,18 @@ import java.util.List;
 @Repository
 public interface DeliveryRecordRepository extends JpaRepository<DeliveryRecord, Long> {
 
-    // ✅ Correct method
     List<DeliveryRecord> findByMilkPlan_Customer_IdOrderByDeliveryDateDesc(Long customerId);
+
     List<DeliveryRecord> findByMilkPlan_Id(Long planId);
-    // Fetch all records for a specific delivery date
+
     List<DeliveryRecord> findByDeliveryDate(LocalDate deliveryDate);
+
     boolean existsByMilkPlan_IdAndDeliveryDate(Long planId, LocalDate deliveryDate);
-    // Fetch all records for a customer (through MilkPlan → Customer)
+
     List<DeliveryRecord> findByMilkPlan_Customer_Id(Long customerId);
 
+    // ✅ New method to check if deliveries already exist
+    long countByMilkPlan_Id(Long planId);
+
+    List<DeliveryRecord> findByMilkPlan_Customer_IdAndDeliveryDate(Long customerId, LocalDate deliveryDate);
 }

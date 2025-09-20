@@ -46,6 +46,19 @@
             <input type="hidden" id="orderId" th:value="${orderId}" />
             <button class="button" type="submit">I Have Paid</button>
         </form>
+        <div style="margin-bottom:18px; color:#233a7d; font-weight:500;">
+            <div>Total liters: <span th:text="${plan.days * plan.litersPerDay}"></span></div>
+            <div>Milk price: ₹<span th:text="${pricePerLiter}"></span> per liter</div>
+            <div>Total amount: <span style="color:#d32f2f; font-weight:700;">₹<span th:text="${totalAmount}"></span></span></div>
+            <div style="margin-top:14px;">
+                <b>Delivery Address:</b><br/>
+                <span th:if="${address != null}" th:text="${address.label + ': ' + address.address}"></span>
+                <span th:if="${address == null}" style="color:#c00;">No address selected!</span>
+                <div style="margin-top:8px;">
+                    <a th:href="@{'/select-address?orderId=' + ${orderId}}" style="color:#3466d3; text-decoration:underline;">Change Address</a>
+                </div>
+            </div>
+        </div>
     </div>
     <div style="margin-top:12px;" class="center"><a href="/home">Back</a></div>
     <div class="footer">© 2025 Shanthi Farms</div>
@@ -54,12 +67,13 @@
     function markPaid(e) {
         e.preventDefault();
         var orderId = document.getElementById('orderId').value;
-        fetch('/orders/' + orderId + '/paid', { method: 'PATCH' })
-            .then(resp => resp.text())
-            .then(msg => {
-                alert('Payment status: ' + msg);
-                window.location.href = '/orders';
-            });
+        fetch('/orders/' + orderId + '/paid', { method: 'POST' })
+            .then(resp => {
+                if (!resp.ok) throw new Error("Payment failed");
+                window.location.href = '/orders'; // ✅ directly redirect
+            })
+            .catch(err => alert("Error: " + err.message));
+
     }
 </script>
 </body>

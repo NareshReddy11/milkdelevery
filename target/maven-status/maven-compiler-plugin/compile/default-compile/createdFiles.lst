@@ -1,8 +1,10 @@
 com\shanthifarms\controller\AdminController.class
+com\shanthifarms\repository\AddressRepository.class
 com\shanthifarms\service\PlanService.class
 com\shanthifarms\controller\DebugController.class
 com\shanthifarms\service\AuthService$OtpEntry.class
 com\shanthifarms\service\WhatsAppService.class
+com\shanthifarms\model\Address.class
 com\shanthifarms\model\MilkPlan.class
 com\shanthifarms\repository\DeliveryRecordRepository.class
 com\shanthifarms\repository\OrderRepository.class

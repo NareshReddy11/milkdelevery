@@ -8,4 +8,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     List<OrderEntity> findByCustomerId(Long customerId);
     List<OrderEntity> findByDeliveryDate(LocalDate date);
+    OrderEntity findByPlan_IdAndDeliveryDate(Long planId, LocalDate deliveryDate);
 }
